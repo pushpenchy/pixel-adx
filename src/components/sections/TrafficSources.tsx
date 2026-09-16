@@ -43,7 +43,7 @@ function BrandIcon({ s }: { s: TrafficSource }) {
 function SourceChip({ s }: { s: TrafficSource }) {
   return (
     <div
-      className="glass liquid-press flex h-14 shrink-0 items-center gap-3 rounded-2xl px-4 pr-5 sm:h-16 sm:px-5 sm:pr-6"
+      className="glass glass-flat liquid-press flex h-14 shrink-0 items-center gap-3 rounded-2xl px-4 pr-5 sm:h-16 sm:px-5 sm:pr-6"
       style={{ ["--brand" as string]: s.color }}
       title={s.name}
     >

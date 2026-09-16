@@ -62,7 +62,7 @@ export function GlobalReach() {
                   <g key={p.label}>
                     <path id={id} d={d} fill="none" stroke="url(#gr-arc)" strokeWidth="1.2" strokeOpacity="0.55" strokeDasharray="4 6" className={reduce ? "" : "flow-line"} />
                     {!reduce && (
-                      <circle r="3" className="fill-white [[data-theme=light]_&]:fill-accent" filter="url(#gr-glow)">
+                      <circle r="3" className="fill-white [[data-theme=light]_&]:fill-accent">
                         <animateMotion dur={`${3.2 + i * 0.5}s`} begin={`${i * 0.6}s`} repeatCount="indefinite">
                           <mpath href={`#${id}`} />
                         </animateMotion>

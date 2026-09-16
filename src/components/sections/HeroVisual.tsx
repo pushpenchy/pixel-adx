@@ -103,7 +103,7 @@ export function HeroVisual() {
               <path d={d} fill="none" stroke="url(#hv-line)" strokeWidth="1.2" className="flow-line" />
               {!reduce &&
                 [0, 1].map((n) => (
-                  <circle key={n} r={n === 0 ? 3 : 2} fill={n === 0 ? "#9cc2ff" : "#38e1ff"} filter="url(#hv-glow)">
+                  <circle key={n} r={n === 0 ? 3 : 2} fill={n === 0 ? "#9cc2ff" : "#38e1ff"}>
                     <animateMotion dur={`${4.5 + i * 0.6}s`} begin={`${n * 2.1 + i * 0.35}s`} repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.2 1" keyTimes="0;1">
                       <mpath href={`#${id}`} />
                     </animateMotion>

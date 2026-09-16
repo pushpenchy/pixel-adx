@@ -72,12 +72,12 @@ export function AdTech() {
                   <path d={d} fill="none" stroke="rgba(56,225,255,0.35)" strokeWidth="1" className="flow-line" />
                   {!reduce && (
                     <>
-                      <circle r="3" fill="#9cc2ff" filter="url(#at-glow)">
+                      <circle r="3" fill="#9cc2ff">
                         <animateMotion dur={`${3.4 + (i % 3) * 0.7}s`} begin={`${i * 0.42}s`} repeatCount="indefinite">
                           <mpath href={`#${id}`} />
                         </animateMotion>
                       </circle>
-                      <circle r="2.2" fill="#38e1ff" filter="url(#at-glow)">
+                      <circle r="2.2" fill="#38e1ff">
                         <animateMotion dur={`${4 + (i % 2) * 0.9}s`} begin={`${1.5 + i * 0.3}s`} repeatCount="indefinite">
                           <mpath href={`#${id}-b`} />
                         </animateMotion>

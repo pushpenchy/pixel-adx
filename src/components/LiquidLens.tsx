@@ -36,9 +36,22 @@ export function LiquidLens() {
     };
     if (fine && !reduce) document.addEventListener("pointermove", onMove, { passive: true });
 
+    // While scrolling, flag <html> so the (expensive) lens distortion and grain
+    // are suspended; they come back ~150ms after the scroll settles.
+    let t = 0;
+    const onScroll = () => {
+      const root = document.documentElement;
+      if (!root.classList.contains("scrolling")) root.classList.add("scrolling");
+      window.clearTimeout(t);
+      t = window.setTimeout(() => root.classList.remove("scrolling"), 150);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       document.documentElement.classList.remove("lens");
       document.removeEventListener("pointermove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(t);
     };
   }, []);
 
