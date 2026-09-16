@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80">
+<defs><linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#38e1ff"/><stop offset="0.5" stop-color="#4d7cfe"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+<g transform="translate(8 8)">
+<g stroke="url(#g)" stroke-opacity="0.35" stroke-width="1.5" stroke-linecap="round"><line x1="10" y1="10" x2="54" y2="54"/><line x1="54" y1="10" x2="10" y2="54"/></g>
+<rect x="2" y="2" width="16" height="16" rx="4.5" fill="url(#g)"/>
+<rect x="46" y="2" width="16" height="16" rx="4.5" fill="url(#g)"/>
+<rect x="2" y="46" width="16" height="16" rx="4.5" fill="url(#g)"/>
+<rect x="46" y="46" width="16" height="16" rx="4.5" fill="url(#g)"/>
+<rect x="24" y="24" width="16" height="16" rx="4.5" fill="#0a0b10"/></g>
+<text x="84" y="53" font-family="Manrope, Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="800" font-size="38" letter-spacing="-1.4" fill="#0a0b10">Pixel<tspan fill="url(#g)"> ADX</tspan></text>
+</svg>
