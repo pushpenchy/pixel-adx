@@ -154,8 +154,10 @@ export const caseStudies: {
   technology: string[];
   services: string[];
   hue: Hue;
-  /** screenshot in /public (16:9-ish); placeholders have none */
+  /** desktop capture in /public (16:10); placeholders have none */
   image?: string;
+  /** phone capture (≈ 9:19.5) shown in a floating handset mockup */
+  mobile?: string;
   /** live site; placeholders link to the contact form */
   href?: string;
   client?: string;
@@ -172,6 +174,7 @@ export const caseStudies: {
     services: ["Web Development", "UI/UX Design"],
     hue: "blue",
     image: "/work/alpha-bd/desktop.webp",
+    mobile: "/work/alpha-bd/mobile.webp",
     href: "https://alphabdpackaging.com/",
   },
   {

@@ -20,8 +20,9 @@ const hueGlow: Record<Hue, string> = {
 };
 
 /**
- * Project card: a browser-frame mockup of the site (crisp 2× capture) on a
- * tinted stage, copy on a solid panel below — nothing overlaps the artwork.
+ * Project card: a browser-frame mockup of the site (crisp 2× capture) with a
+ * phone mockup floating over its corner, on a tinted stage; copy sits on a
+ * solid panel below so nothing overlaps the artwork.
  */
 function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: number }) {
   const host = p.href ? p.href.replace(/^https?:\/\//, "").replace(/\/$/, "") : "coming-soon";
@@ -65,6 +66,19 @@ function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: num
               )}
             </div>
           </div>
+
+          {/* floating handset, overlapping the browser's corner */}
+          {p.mobile && (
+            <div
+              className="absolute -bottom-[7%] right-5 w-[23%] min-w-[118px] max-w-[188px] rounded-[1.7rem] border-[5px] border-[#171a26] bg-[#05060a] shadow-[0_34px_70px_-22px_rgba(0,0,0,0.95),0_0_0_1px_rgba(255,255,255,0.09)] transition-transform delay-75 duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-4 sm:right-8"
+              style={{ aspectRatio: "430 / 932" }}
+            >
+              <div aria-hidden className="absolute left-1/2 top-[1.6%] z-10 h-[2.6%] w-[34%] -translate-x-1/2 rounded-full bg-[#171a26]" />
+              <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                <Image src={p.mobile} alt="" fill quality={90} sizes="190px" className="object-cover object-top" />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── copy */}
