@@ -27,7 +27,7 @@ export function AdTech() {
   return (
     <Section id="adtech" className="overflow-hidden">
       <SectionHeading
-        index="03"
+        index="04"
         eyebrow="AdTech"
         title="Where advertising meets"
         accent="technology."

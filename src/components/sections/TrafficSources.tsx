@@ -62,7 +62,7 @@ export function TrafficSources() {
     <Section id="traffic" className="py-16 sm:py-20 lg:py-24" bleed>
       <div className="container-x">
         <SectionHeading
-          index="02"
+          index="01"
           eyebrow="Traffic Sources"
           title="Traffic sources"
           accent="we use."

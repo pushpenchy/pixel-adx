@@ -1,8 +1,8 @@
 "use client";
 
 import { createRef, useMemo, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera, View } from "@react-three/drei";
 import { ArrowUpRight, Radar, Megaphone, Target, Braces, Globe, Smartphone, PenTool, ShoppingBag, BarChart3, Workflow, type LucideIcon } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -10,6 +10,16 @@ import { services, type ServiceIcon } from "@/content/site";
 import { miniScenes } from "@/components/three/services/MiniScenes";
 import { isLiteDevice } from "@/lib/quality";
 import { cn } from "@/lib/utils";
+
+/** With <View> rendering manually, R3F never clears the canvas — do it once per frame, before the views. */
+function ClearPass() {
+  useFrame(({ gl }) => {
+    gl.setClearColor(0x000000, 0);
+    gl.setScissorTest(false);
+    gl.clear();
+  }, 0);
+  return null;
+}
 
 const CORE: ServiceIcon[] = ["adtech", "media", "performance"];
 const icons: Record<ServiceIcon, LucideIcon> = { adtech: Radar, media: Megaphone, performance: Target, software: Braces, web: Globe, mobile: Smartphone, uiux: PenTool, ecommerce: ShoppingBag, data: BarChart3, automation: Workflow };
@@ -25,6 +35,10 @@ export function ServicesBento() {
   const container = useRef<HTMLDivElement>(null);
   const refs = useMemo(() => services.map(() => createRef<HTMLDivElement>()), []);
   const lite = useMemo(() => isLiteDevice(), []);
+  // drei <View> measures cards against the canvas size in viewport coordinates,
+  // so the canvas must be a fixed full-window layer. Mount it only while the
+  // grid is near the viewport.
+  const near = useInView(container, { margin: "300px 0px" });
 
   const is3D = (id: ServiceIcon) => !lite || CORE.includes(id);
 
@@ -71,13 +85,15 @@ export function ServicesBento() {
           })}
         </div>
 
-        {/* one context, many views */}
+        {/* one context, many views — fixed full-window layer under the navbar */}
+        {near && (
         <Canvas
           eventSource={container as React.RefObject<HTMLElement>}
-          className="!pointer-events-none !absolute inset-0"
+          className="!pointer-events-none !fixed inset-0 z-10"
           dpr={lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 1.5)}
           gl={{ antialias: false, alpha: true, powerPreference: "high-performance", stencil: false }}
         >
+          <ClearPass />
           {services.map((s, i) =>
             is3D(s.icon) ? (
               <View key={s.icon} track={refs[i] as React.RefObject<HTMLElement>}>
@@ -101,6 +117,7 @@ export function ServicesBento() {
             ) : null
           )}
         </Canvas>
+        )}
       </div>
     </Section>
   );

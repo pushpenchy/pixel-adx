@@ -107,7 +107,7 @@ export function CaseStudies() {
         <div className={horizontal ? "sticky top-0 flex h-screen flex-col justify-center overflow-hidden" : "py-24 sm:py-28"}>
           <div className="container-x">
             <SectionHeading
-              index="08"
+              index="09"
               eyebrow="Work"
               title="Selected"
               accent="work."

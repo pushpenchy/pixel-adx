@@ -57,7 +57,7 @@ export function MediaBuying() {
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div>
           <SectionHeading
-            index="04"
+            index="05"
             eyebrow="Media Buying"
             title="Buy smarter."
             accent="Scale faster."

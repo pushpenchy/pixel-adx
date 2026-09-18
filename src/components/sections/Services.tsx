@@ -59,7 +59,7 @@ export function Services() {
   return (
     <Section id="services">
       <SectionHeading
-        index="01"
+        index="02"
         eyebrow="Services"
         title="Everything your digital growth"
         accent="needs."
