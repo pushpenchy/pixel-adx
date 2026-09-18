@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageIcon } from "lucide-react";
 import { SectionHeading } from "@/components/ui/Section";
@@ -16,18 +17,24 @@ const hueBg: Record<Hue, string> = {
 function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: number }) {
   return (
     <SpotlightCard as="article" className="h-full w-full rounded-xl3" lift={0}>
-      <a href="#contact" className="block h-full">
+      <a href={p.href ?? "#contact"} target={p.href ? "_blank" : undefined} rel={p.href ? "noopener noreferrer" : undefined} className="block h-full">
         <div className="relative flex h-full flex-col overflow-hidden rounded-[inherit]">
-          {/* image / video placeholder */}
+          {/* screenshot, or a placeholder until the client signs off */}
           <div className={`absolute inset-0 bg-gradient-to-br ${hueBg[p.hue]} transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.06]`}>
-            <div className="absolute inset-0 bg-grid opacity-40 [--grid-size:40px]" />
-            <div className="absolute left-1/2 top-[30%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 text-white/30">
-              <ImageIcon className="size-8" strokeWidth={1.4} />
-              <span className="text-[11px] font-medium uppercase tracking-[0.2em]">Image / Video placeholder</span>
-            </div>
+            {p.image ? (
+              <Image src={p.image} alt={`${p.name} website`} fill sizes="(min-width: 1024px) 760px, 100vw" className="object-cover object-top" />
+            ) : (
+              <>
+                <div className="absolute inset-0 bg-grid opacity-40 [--grid-size:40px]" />
+                <div className="absolute left-1/2 top-[30%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 text-white/30">
+                  <ImageIcon className="size-8" strokeWidth={1.4} />
+                  <span className="text-[11px] font-medium uppercase tracking-[0.2em]">Image / Video placeholder</span>
+                </div>
+              </>
+            )}
           </div>
           {/* overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--bg)/0)_20%,rgb(var(--bg)/0.55)_60%,rgb(var(--bg)/0.92)_100%)] transition-opacity duration-500 group-hover:opacity-100" />
+          <div className={p.image ? "absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--bg)/0.15)_0%,rgb(var(--bg)/0.35)_35%,rgb(var(--bg)/0.9)_70%,rgb(var(--bg)/0.97)_100%)]" : "absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--bg)/0)_20%,rgb(var(--bg)/0.55)_60%,rgb(var(--bg)/0.92)_100%)] transition-opacity duration-500 group-hover:opacity-100"} />
           <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/25" />
 
           {/* content */}
@@ -36,10 +43,11 @@ function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: num
               <span className="rounded-full border border-white/15 bg-ink/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80 backdrop-blur">
                 {p.category}
               </span>
-              <span className="font-display text-sm font-bold text-white/40">0{index + 1}</span>
+              <span className="font-display text-sm font-bold text-white/40">{p.year ?? `0${index + 1}`}</span>
             </div>
 
             <div className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-2">
+              {p.client && <p className="label-mono mb-2 text-white/50">{p.client}</p>}
               <h3 className="font-display text-2xl font-bold tracking-[-0.025em] text-white sm:text-3xl">{p.name}</h3>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-white/70">{p.description}</p>
               <div className="mt-4 grid gap-1.5 text-[12px] sm:grid-cols-2">
@@ -53,7 +61,7 @@ function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: num
                 </p>
               </div>
               <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white">
-                View Case Study
+                {p.href ? "Visit live site" : "View Case Study"}
                 <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
               </span>
             </div>
@@ -111,7 +119,7 @@ export function CaseStudies() {
               eyebrow="Work"
               title="Selected"
               accent="work."
-              subtitle="Placeholders shown — swap in approved client projects, imagery and results."
+              subtitle="Recent projects. Placeholders stay until each client signs off on being shown."
             />
           </div>
 

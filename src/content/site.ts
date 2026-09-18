@@ -156,14 +156,25 @@ export const caseStudies: {
   technology: string[];
   services: string[];
   hue: Hue;
+  /** screenshot in /public (16:9-ish); placeholders have none */
+  image?: string;
+  /** live site; placeholders link to the contact form */
+  href?: string;
+  client?: string;
+  year?: string;
 }[] = [
   {
-    category: "AdTech Platform",
-    name: "Project Placeholder One",
-    description: "Short project description goes here. Describe the challenge, the approach and the outcome.",
-    technology: ["Next.js", "Node.js", "PostgreSQL"],
-    services: ["AdTech", "Data & Analytics"],
+    category: "Corporate Website",
+    name: "Alpha BD Packaging",
+    client: "Alpha BD Packaging · Chattogram",
+    year: "2026",
+    description:
+      "A B2B site for a garments trims & accessories manufacturer supplying RMG exporters: product lines, OEKO-TEX credentials, process, group concerns and a quote flow — built to turn buyer research into enquiries.",
+    technology: ["HTML", "CSS", "JavaScript", "Dark / light theme"],
+    services: ["Web Development", "UI/UX Design"],
     hue: "blue",
+    image: "/work/alpha-bd-packaging.webp",
+    href: "https://alphabdpackaging.com/",
   },
   {
     category: "Performance Campaign",
