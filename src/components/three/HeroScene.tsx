@@ -8,7 +8,7 @@ import { SceneCanvas, type SceneCanvasProps } from "./SceneCanvas";
  * (lights, grid, bloom, adaptive quality). Pick the site's hero in
  * src/content/site.ts → heroScene. Preview them all at /lab.
  */
-export type SceneId = "sphere" | "mark" | "knot" | "warp" | "globe" | "deck" | "skyline";
+export type SceneId = "sphere" | "mark" | "knot" | "warp" | "globe" | "deck" | "skyline" | "iso";
 
 export const scenes: Record<SceneId, { name: string; tagline: string; says: string; canvas: Partial<SceneCanvasProps> }> = {
   sphere: {
@@ -53,6 +53,12 @@ export const scenes: Record<SceneId, { name: string; tagline: string; says: stri
     says: "Growth, literally — a living bar chart you fly over.",
     canvas: { size: 1.0, offset: 0.07, camera: [0, 3.2, 10.5], look: [0, -0.6, 0], bloomIntensity: 0.9 },
   },
+  iso: {
+    name: "Isometric Studio",
+    tagline: "An illustrated 3D diorama: phone, app tiles, gears, code, chart — all alive.",
+    says: "Friendly, product-minded, hands-on — we design, build and ship digital products.",
+    canvas: { size: 0.88, offset: 0.0, camera: [10, 8.2, 11.2], look: [0, 0.9, 0], grid: false, sparkles: false, particles: false, bloomIntensity: 0.25 },
+  },
 };
 
 const loaders = {
@@ -63,6 +69,7 @@ const loaders = {
   globe: dynamic(() => import("./scenes/Globe"), { ssr: false }),
   deck: dynamic(() => import("./scenes/Deck"), { ssr: false }),
   skyline: dynamic(() => import("./scenes/Skyline"), { ssr: false }),
+  iso: dynamic(() => import("./scenes/Iso"), { ssr: false }),
 };
 
 export default function HeroScene({
