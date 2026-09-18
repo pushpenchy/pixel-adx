@@ -68,9 +68,11 @@ function CameraRig({ base, look }: { base: [number, number, number]; look: [numb
 /** Scales the scene so it always fits the canvas, offset right so headline copy can overlap the left edge. */
 function Fit({ children, size = 1, offset = 0.06 }: { children: React.ReactNode; size?: number; offset?: number }) {
   const { viewport } = useThree();
-  const s = Math.min(0.72 * size, (viewport.width / 11.5) * size, (viewport.height / 10.5) * size);
+  // narrow canvases (phones) get a smaller, centred composition
+  const narrow = viewport.width < 8;
+  const s = Math.min(0.72 * size, (viewport.width / 11.5) * size, (viewport.height / 10.5) * size) * (narrow ? 0.82 : 1);
   return (
-    <group scale={s} position={[viewport.width * offset, 0.35, 0]}>
+    <group scale={s} position={[narrow ? 0 : viewport.width * offset, 0.35, 0]}>
       {children}
     </group>
   );

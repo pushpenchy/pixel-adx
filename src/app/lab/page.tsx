@@ -8,7 +8,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Check } from "lucide-react";
 import { scenes, type SceneId } from "@/components/three/HeroScene";
 import { useTheme } from "@/components/theme/ThemeProvider";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/utils";
 
@@ -35,10 +34,7 @@ function Lab() {
           <Link href="/" className="inline-flex items-center gap-2 text-sm text-mute hover:text-white">
             <ArrowLeft className="size-4" /> Back to site
           </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <Logo markSize={26} id="lab-mark" />
-          </div>
+          <Logo markSize={26} id="lab-mark" />
         </header>
 
         <div className="mt-[52vh] lg:mt-auto lg:max-w-[40rem]">

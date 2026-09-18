@@ -339,3 +339,27 @@ export function makeWindowsTexture() {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
+
+/** Repeating scan-line strip with one bright sweep band (offset-animated). */
+export function makeScanTexture() {
+  const W = 4;
+  const H = 512;
+  const { c, ctx } = canvas(W, H);
+  ctx.clearRect(0, 0, W, H);
+  // fine scanlines
+  for (let y = 0; y < H; y += 4) {
+    ctx.fillStyle = "rgba(160,190,255,0.10)";
+    ctx.fillRect(0, y, W, 1);
+  }
+  // sweep band
+  const g = ctx.createLinearGradient(0, 40, 0, 120);
+  g.addColorStop(0, "rgba(255,255,255,0)");
+  g.addColorStop(0.5, "rgba(190,215,255,0.55)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 40, W, 80);
+  const t = toTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(1, 1);
+  return t;
+}

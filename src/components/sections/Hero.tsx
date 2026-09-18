@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useRef, useSyncExternalStore } from "react";
 import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { Activity, TrendingUp, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Section";
 import { brand, heroScene } from "@/content/site";
@@ -28,12 +27,6 @@ const hasWebGL = () => {
 const noop = () => () => {};
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-const cards = [
-  { icon: Zap, label: "Campaign Active", sub: "Live", style: "left-[4%] top-[14%]", delay: 0, dot: true },
-  { icon: TrendingUp, label: "ROAS", sub: "Optimizing", style: "right-[14%] top-[16%]", delay: 1.4 },
-  { icon: Activity, label: "Real-Time Analytics", sub: "Streaming", style: "right-[18%] bottom-[14%]", delay: 0.8 },
-];
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -72,33 +65,6 @@ export function Hero() {
             <HeroVisual />
           </div>
         )}
-
-        {cards.map((c, i) => (
-          <motion.div
-            key={c.label}
-            initial={reduce ? false : { opacity: 0, y: 10, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 1.1 + i * 0.15, duration: 0.7, ease }}
-            className={`absolute hidden sm:block ${c.style}`}
-          >
-            <motion.div
-              animate={reduce ? undefined : { y: [0, -8, 0] }}
-              transition={{ duration: 6 + i, repeat: Infinity, ease: "easeInOut", delay: c.delay }}
-              className="glass flex items-center gap-2.5 rounded-xl px-3 py-2"
-            >
-              <span className="grid size-7 place-items-center rounded-lg bg-white/[0.06] text-cyan">
-                <c.icon className="size-3.5" />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-[12px] font-semibold text-white">{c.label}</span>
-                <span className="flex items-center gap-1.5 text-[10.5px] text-white/50">
-                  {c.dot && <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_1px_rgba(52,211,153,0.7)]" />}
-                  {c.sub}
-                </span>
-              </span>
-            </motion.div>
-          </motion.div>
-        ))}
       </motion.div>
 
       {/* Copy */}

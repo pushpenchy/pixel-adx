@@ -14,6 +14,9 @@ export function SmoothScroll() {
 
   useEffect(() => {
     if (reduce) return;
+    // The browser restores the previous scroll offset after load; Lenis would
+    // animate that as a long slide. Start at the top instead.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     const lenis = new Lenis({
       lerp: 0.09,
       wheelMultiplier: 0.95,

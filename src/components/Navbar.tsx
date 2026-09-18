@@ -5,7 +5,6 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { nav } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -101,7 +100,6 @@ export function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle className="hidden sm:inline-flex" />
             <Button href="#contact" className="hidden sm:inline-flex">
               Let&apos;s Talk
             </Button>
@@ -155,9 +153,8 @@ export function Navbar() {
                   </motion.li>
                 ))}
               </ul>
-              <div className="mt-3 flex items-center gap-3 border-t border-white/10 pt-3">
-                <ThemeToggle size="lg" />
-                <Button href="#contact" size="lg" className="flex-1" onClick={() => setOpen(false)}>
+              <div className="mt-3 border-t border-white/10 pt-3">
+                <Button href="#contact" size="lg" className="w-full" onClick={() => setOpen(false)}>
                   Let&apos;s Talk
                 </Button>
               </div>

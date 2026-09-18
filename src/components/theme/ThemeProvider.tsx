@@ -1,66 +1,29 @@
 "use client";
 
-import { createContext, useCallback, useContext, useLayoutEffect, useSyncExternalStore, type ReactNode } from "react";
-
-export type Theme = "dark" | "light";
-export const THEME_KEY = "px-theme";
-const EVENT = "px-theme-change";
-
-type Ctx = { theme: Theme; setTheme: (t: Theme) => void; toggle: () => void };
-const ThemeContext = createContext<Ctx | null>(null);
+import { createContext, useContext, useLayoutEffect, type ReactNode } from "react";
 
 /**
- * Inline script executed before hydration so the correct theme is applied
- * on first paint (no flash). Dark is the brand default; a stored choice wins.
+ * Theme is locked to dark — the brand look. The light palette still exists in
+ * globals.css under [data-theme="light"] should it ever be wanted again; the
+ * switch UI was removed by request. `useTheme()` is kept so components that
+ * consult the theme keep working unchanged.
  */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(t!=="light"&&t!=="dark")t="dark";document.documentElement.dataset.theme=t;}catch(e){}})();`;
+export type Theme = "dark" | "light";
+export const THEME_KEY = "px-theme";
 
-function readStored(): Theme {
-  try {
-    return localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark";
-  } catch {
-    return "dark";
-  }
-}
+type Ctx = { theme: Theme };
+const ThemeContext = createContext<Ctx>({ theme: "dark" });
 
-function subscribe(cb: () => void) {
-  window.addEventListener("storage", cb); // other tabs
-  window.addEventListener(EVENT, cb); // this tab
-  return () => {
-    window.removeEventListener("storage", cb);
-    window.removeEventListener(EVENT, cb);
-  };
-}
+/** Runs before hydration: pin dark and clear any stored light preference. */
+export const themeInitScript = `(function(){try{document.documentElement.dataset.theme="dark";localStorage.removeItem("${THEME_KEY}");}catch(e){}})();`;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Server snapshot is always "dark"; the client re-renders with the stored
-  // value right after hydration without a mismatch error.
-  const theme = useSyncExternalStore(subscribe, readStored, () => "dark" as Theme);
-
-  // React drops the pre-hydration data-theme attribute on <html> while
-  // hydrating, so re-apply it before paint whenever the theme changes.
   useLayoutEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
-  const setTheme = useCallback((t: Theme) => {
-    const root = document.documentElement;
-    // brief colour-only transition so the switch feels intentional, not jarring
-    root.classList.add("theme-transition");
-    window.setTimeout(() => root.classList.remove("theme-transition"), 400);
-    try {
-      localStorage.setItem(THEME_KEY, t);
-    } catch {}
-    window.dispatchEvent(new Event(EVENT));
+    document.documentElement.dataset.theme = "dark";
   }, []);
-
-  const toggle = useCallback(() => setTheme(theme === "dark" ? "light" : "dark"), [theme, setTheme]);
-
-  return <ThemeContext.Provider value={{ theme, setTheme, toggle }}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={{ theme: "dark" }}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used inside <ThemeProvider>");
-  return ctx;
+  return useContext(ThemeContext);
 }
