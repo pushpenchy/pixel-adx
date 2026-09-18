@@ -52,7 +52,7 @@ export function Button({
   const sizes = size === "lg" ? "h-13 px-7 text-[15px]" : "h-11 px-5.5 text-sm";
   const variants = {
     primary:
-      "text-pure-white bg-[linear-gradient(120deg,#4d7cfe,#6d8cff_45%,#8b5cf6)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_10px_30px_-10px_rgba(77,124,254,0.7)] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_14px_40px_-10px_rgba(77,124,254,0.9)]",
+      "text-pure-white bg-[linear-gradient(120deg,var(--color-accent),var(--color-accent-2)_45%,var(--color-violet))] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_10px_30px_-10px_rgb(var(--accent-rgb)/0.7)] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_14px_40px_-10px_rgb(var(--accent-rgb)/0.9)]",
     secondary:
       "glass text-white hover:[--glass-a1:0.18] hover:[--glass-a2:0.08] [[data-theme=light]_&]:hover:[--glass-a1:0.85] [[data-theme=light]_&]:hover:[--glass-a2:0.55]",
     ghost: "text-white/80 hover:text-white",

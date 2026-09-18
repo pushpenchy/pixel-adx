@@ -37,13 +37,13 @@ export function AdTech() {
       <div className="mt-14 grid items-center gap-10 lg:mt-20 lg:grid-cols-[1.25fr_0.85fr] lg:gap-14">
         {/* Network visualization */}
         <Reveal className="relative">
-          <div aria-hidden className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.2),transparent)] blur-3xl" />
+          <div aria-hidden className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.2),transparent)] blur-3xl" />
           <svg viewBox={`0 0 ${W} ${H}`} className="relative mx-auto w-full max-w-[640px]" role="img" aria-label="Pixel ADX connected to advertisers, publishers, audiences, campaigns, traffic, data, conversions and analytics">
             <defs>
               <radialGradient id="at-hub">
-                <stop offset="0" stopColor="#4d7cfe" stopOpacity="0.5" />
-                <stop offset="0.5" stopColor="#4d7cfe" stopOpacity="0.1" />
-                <stop offset="1" stopColor="#4d7cfe" stopOpacity="0" />
+                <stop offset="0" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0.5" />
+                <stop offset="0.5" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0.1" />
+                <stop offset="1" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0" />
               </radialGradient>
               <filter id="at-glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="3" result="b" />
@@ -71,7 +71,7 @@ export function AdTech() {
                 <g key={label} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} className="cursor-default">
                   <path id={id} d={d} fill="none" stroke={active ? "rgba(120,170,255,0.55)" : "rgb(var(--fg)/0.10)"} strokeWidth={active ? 1.6 : 1.1} className="transition-all duration-300" />
                   <path id={`${id}-b`} d={dBack} fill="none" stroke="none" />
-                  <path d={d} fill="none" stroke="rgba(56,225,255,0.35)" strokeWidth="1" className="flow-line" />
+                  <path d={d} fill="none" stroke="rgb(var(--cyan-rgb)/0.35)" strokeWidth="1" className="flow-line" />
                   {!reduce && (
                     <>
                       <circle r="3" fill="#9cc2ff">
@@ -79,7 +79,7 @@ export function AdTech() {
                           <mpath href={`#${id}`} />
                         </animateMotion>
                       </circle>
-                      <circle r="2.2" fill="#38e1ff">
+                      <circle r="2.2" style={{ fill: "var(--color-cyan)" }}>
                         <animateMotion dur={`${4 + (i % 2) * 0.9}s`} begin={`${1.5 + i * 0.3}s`} repeatCount="indefinite">
                           <mpath href={`#${id}-b`} />
                         </animateMotion>
@@ -98,7 +98,7 @@ export function AdTech() {
 
             {/* hub */}
             <circle cx={CX} cy={CY} r="60" fill="rgb(var(--bg)/0.95)" stroke="rgba(120,170,255,0.55)" strokeWidth="1.3" />
-            <circle cx={CX} cy={CY} r="60" fill="none" stroke="#4d7cfe" strokeOpacity="0.5" className={reduce ? "" : "animate-pulse-soft"} style={{ transformOrigin: `${CX}px ${CY}px` }} />
+            <circle cx={CX} cy={CY} r="60" fill="none" strokeOpacity="0.5" className={reduce ? "" : "animate-pulse-soft"} style={{ stroke: "var(--color-accent)", transformOrigin: `${CX}px ${CY}px` }} />
             <foreignObject x={CX - 24} y={CY - 32} width="48" height="48">
               <div className="grid h-full w-full place-items-center">
                 <LogoMark size={40} id="adtech-mark" />

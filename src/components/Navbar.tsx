@@ -54,7 +54,7 @@ export function Navbar() {
       <motion.div
         aria-hidden
         style={{ scaleX: progress, transformOrigin: "left" }}
-        className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-[linear-gradient(90deg,#38e1ff,#4d7cfe,#8b5cf6)] will-change-transform"
+        className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-[linear-gradient(90deg,var(--color-cyan),var(--color-accent),var(--color-violet))] will-change-transform"
       />
       <motion.header
         initial={reduce ? false : { y: -24, opacity: 0 }}

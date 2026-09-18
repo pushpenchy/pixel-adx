@@ -81,7 +81,7 @@ export function Industries() {
                   className="crystal absolute inset-0 overflow-hidden rounded-[inherit] border border-white/10 bg-ink-2/60 transition-colors duration-300 group-hover:border-white/20"
                   aria-hidden
                 >
-                  <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.16),transparent_70%)] opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.16),transparent_70%)] opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
                 </motion.div>
                 {/* scrim keeps the label legible where a vignette reaches the bottom */}
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[48%] rounded-b-[inherit] bg-[linear-gradient(to_top,rgba(7,9,18,0.88),rgba(7,9,18,0.42)_48%,transparent)]" aria-hidden />

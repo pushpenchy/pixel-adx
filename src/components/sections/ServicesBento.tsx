@@ -51,7 +51,7 @@ export function ServicesBento() {
                 transition={{ duration: 0.6, delay: (i % 4) * 0.06, ease: [0.22, 1, 0.36, 1] }}
                 className={cn("crystal group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-ink-2/60", span)}
               >
-                <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.16),transparent_70%)]" aria-hidden />
+                <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.16),transparent_70%)]" aria-hidden />
                 {!is3D(s.icon) && (
                   <span className="absolute left-1/2 top-[38%] grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-2xl border border-white/10 bg-white/[0.05] text-cyan">
                     <Icon className="size-6" strokeWidth={1.6} />

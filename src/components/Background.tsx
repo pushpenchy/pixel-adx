@@ -8,9 +8,9 @@ export function Background() {
       {/* grid */}
       <div className="absolute inset-0 bg-grid mask-radial opacity-70" />
       {/* blobs */}
-      <div className="absolute -top-[20%] -left-[10%] h-[60vmax] w-[60vmax] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,var(--blob-a)),rgba(77,124,254,calc(var(--blob-a)*0.35))_40%,transparent_72%)] animate-blob will-change-transform" />
-      <div className="absolute -bottom-[30%] -right-[15%] h-[70vmax] w-[70vmax] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,var(--blob-b)),rgba(139,92,246,calc(var(--blob-b)*0.35))_40%,transparent_72%)] animate-blob-slow will-change-transform" />
-      <div className="absolute top-[30%] right-[10%] h-[40vmax] w-[40vmax] rounded-full bg-[radial-gradient(closest-side,rgba(56,225,255,var(--blob-c)),rgba(56,225,255,calc(var(--blob-c)*0.35))_40%,transparent_72%)] animate-blob will-change-transform [animation-delay:-8s]" />
+      <div className="absolute -top-[20%] -left-[10%] h-[60vmax] w-[60vmax] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/var(--blob-a)),rgb(var(--accent-rgb)/calc(var(--blob-a)*0.35))_40%,transparent_72%)] animate-blob will-change-transform" />
+      <div className="absolute -bottom-[30%] -right-[15%] h-[70vmax] w-[70vmax] rounded-full bg-[radial-gradient(closest-side,rgb(var(--violet-rgb)/var(--blob-b)),rgb(var(--violet-rgb)/calc(var(--blob-b)*0.35))_40%,transparent_72%)] animate-blob-slow will-change-transform" />
+      <div className="absolute top-[30%] right-[10%] h-[40vmax] w-[40vmax] rounded-full bg-[radial-gradient(closest-side,rgb(var(--cyan-rgb)/var(--blob-c)),rgb(var(--cyan-rgb)/calc(var(--blob-c)*0.35))_40%,transparent_72%)] animate-blob will-change-transform [animation-delay:-8s]" />
       {/* vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_40%,rgb(var(--bg)/0.8)_100%)]" />
     </div>

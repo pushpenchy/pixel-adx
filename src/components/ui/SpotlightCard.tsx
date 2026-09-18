@@ -48,7 +48,7 @@ export function SpotlightCard({ children, className, lift = 6, tilt = false, sty
     ry.set(0);
   };
 
-  const spotlight = useMotionTemplate`radial-gradient(360px circle at ${mx}px ${my}px, rgba(77,124,254,0.16), transparent 60%)`;
+  const spotlight = useMotionTemplate`radial-gradient(360px circle at ${mx}px ${my}px, rgb(var(--accent-rgb)/0.16), transparent 60%)`;
   const border = useMotionTemplate`radial-gradient(260px circle at ${mx}px ${my}px, rgba(120,170,255,0.7), transparent 70%)`;
 
   const Comp = motion[as] as unknown as React.ComponentType<Record<string, unknown>>;

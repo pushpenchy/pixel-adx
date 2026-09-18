@@ -65,7 +65,7 @@ export function ServicesStory() {
             {/* progress */}
             <ol className="mt-6 flex flex-wrap gap-2 sm:mt-10">
               {services.map((x, i) => (
-                <li key={x.icon} className={cn("h-1.5 rounded-full transition-all duration-400", i === sel.cur ? "w-8 bg-[linear-gradient(90deg,#38e1ff,#8b5cf6)]" : i < sel.cur ? "w-3 bg-white/40" : "w-3 bg-white/15")} />
+                <li key={x.icon} className={cn("h-1.5 rounded-full transition-all duration-400", i === sel.cur ? "w-8 bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))]" : i < sel.cur ? "w-3 bg-white/40" : "w-3 bg-white/15")} />
               ))}
             </ol>
             <p className="label-mono mt-4 normal-case tracking-normal text-white/40">Scroll to explore</p>
@@ -73,7 +73,7 @@ export function ServicesStory() {
 
           {/* stage */}
           <div className="crystal relative aspect-[16/10] overflow-hidden rounded-[2rem] border border-white/10 bg-ink-2/60 sm:aspect-[5/4] lg:aspect-[4/3]">
-            <div className="absolute inset-[15%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.22),transparent_70%)]" aria-hidden />
+            <div className="absolute inset-[15%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.22),transparent_70%)]" aria-hidden />
             <ServiceStage current={s.icon} prev={sel.prev} reduce={!!reduce} active={inView} />
           </div>
         </div>

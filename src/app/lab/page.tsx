@@ -66,7 +66,7 @@ function Lab() {
                       <span className="block text-[12px] text-mute">{scenes[id].tagline}</span>
                     </span>
                     {on && (
-                      <motion.span layoutId="lab-check" className="grid size-6 place-items-center rounded-full bg-[linear-gradient(135deg,#38e1ff,#8b5cf6)] text-pure-white">
+                      <motion.span layoutId="lab-check" className="grid size-6 place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-cyan),var(--color-violet))] text-pure-white">
                         <Check className="size-3.5" strokeWidth={3} />
                       </motion.span>
                     )}
@@ -80,6 +80,9 @@ function Lab() {
           </p>
           <Link href="/lab/services" className="glass liquid-press mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white">
             Services section concepts →
+          </Link>
+          <Link href="/lab/themes" className="glass liquid-press ml-2 mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white">
+            Site themes →
           </Link>
         </div>
       </div>

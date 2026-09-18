@@ -19,7 +19,7 @@ export function TextTicker({ items, className, reverse }: { items: string[]; cla
             >
               {w}
             </span>
-            <span className="grid size-3 rotate-45 place-items-center bg-[linear-gradient(135deg,#38e1ff,#8b5cf6)]" />
+            <span className="grid size-3 rotate-45 place-items-center bg-[linear-gradient(135deg,var(--color-cyan),var(--color-violet))]" />
           </span>
         ))}
       </Marquee>

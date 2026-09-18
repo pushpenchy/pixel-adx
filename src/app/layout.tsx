@@ -8,6 +8,7 @@ import { LiquidLens } from "@/components/LiquidLens";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Intro } from "@/components/Intro";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SkinSwitcher } from "@/components/SkinSwitcher";
 import { ThemeProvider, themeInitScript } from "@/components/theme/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Background />
           <CursorGlow />
           <LiquidLens />
+          <SkinSwitcher />
           {children}
         </ThemeProvider>
         <SpeedInsights />

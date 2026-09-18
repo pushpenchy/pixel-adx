@@ -20,13 +20,13 @@ export function CTA() {
             aria-hidden
             animate={reduce ? undefined : { x: ["-10%", "10%", "-10%"], y: ["-6%", "8%", "-6%"] }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -left-1/4 -top-1/2 -z-[1] h-[140%] w-[80%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.35),transparent)] blur-3xl will-change-transform"
+            className="absolute -left-1/4 -top-1/2 -z-[1] h-[140%] w-[80%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.35),transparent)] blur-3xl will-change-transform"
           />
           <motion.div
             aria-hidden
             animate={reduce ? undefined : { x: ["8%", "-12%", "8%"], y: ["6%", "-8%", "6%"] }}
             transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-1/2 -right-1/4 -z-[1] h-[140%] w-[80%] rounded-full bg-[radial-gradient(closest-side,rgba(139,92,246,0.32),transparent)] blur-3xl will-change-transform"
+            className="absolute -bottom-1/2 -right-1/4 -z-[1] h-[140%] w-[80%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--violet-rgb)/0.32),transparent)] blur-3xl will-change-transform"
           />
           <div aria-hidden className="absolute inset-0 -z-[1] bg-grid opacity-50 mask-radial" />
           <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--fg)/0.5),transparent)]" />

@@ -33,7 +33,7 @@ const icons: Record<ServiceIcon, LucideIcon> = {
   automation: Workflow,
 };
 
-const tints = ["#38e1ff", "#4d7cfe", "#8b5cf6", "#22d3ee", "#6d8cff", "#a78bfa", "#38e1ff", "#4d7cfe", "#8b5cf6", "#6d8cff"];
+const tints = ["var(--color-cyan)", "var(--color-accent)", "var(--color-violet)", "#22d3ee", "var(--color-accent-2)", "#a78bfa", "var(--color-cyan)", "var(--color-accent)", "var(--color-violet)", "var(--color-accent-2)"];
 
 /**
  * Editorial numbered list: index / title / description / arrow rows with a
@@ -98,7 +98,7 @@ export function Services() {
                       {s.title}
                       <span
                         aria-hidden
-                        className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[linear-gradient(90deg,#38e1ff,#8b5cf6)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100"
+                        className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100"
                       />
                     </span>
                   </h3>
@@ -128,7 +128,7 @@ export function Services() {
             >
               <div
                 className="glass glass-flat w-56 rounded-2xl p-5"
-                style={{ boxShadow: `0 30px 80px -30px ${tints[active]}aa, inset 0 1px 0 rgba(255,255,255,.4)` }}
+                style={{ boxShadow: `0 30px 80px -30px color-mix(in srgb, ${tints[active]} 67%, transparent), inset 0 1px 0 rgba(255,255,255,.4)` }}
               >
                 <div
                   className="grid size-12 place-items-center rounded-xl text-pure-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5)]"

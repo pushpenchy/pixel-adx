@@ -28,13 +28,13 @@ export function GlobalReach() {
       />
 
       <Reveal className="relative mt-14 lg:mt-20" delay={0.1}>
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-1/2 h-[60%] -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(77,124,254,0.16),transparent_60%)] blur-2xl" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-1/2 h-[60%] -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgb(var(--accent-rgb)/0.16),transparent_60%)] blur-2xl" />
         <div className="crystal relative overflow-hidden rounded-xl3 border border-white/[0.08] bg-ink-2/60 p-3 sm:p-6">
           <svg viewBox={`0 ${H * 0.06} ${W} ${H * 0.8}`} className="w-full" role="img" aria-label="Abstract world map with connection points in Bangladesh, Asia, the Middle East, Europe and North America">
             <defs>
               <linearGradient id="gr-arc" x1="0" x2="1" y1="0" y2="0">
-                <stop offset="0" stopColor="#38e1ff" stopOpacity="0.9" />
-                <stop offset="1" stopColor="#8b5cf6" stopOpacity="0.9" />
+                <stop offset="0" style={{ stopColor: "var(--color-cyan)" }} stopOpacity="0.9" />
+                <stop offset="1" style={{ stopColor: "var(--color-violet)" }} stopOpacity="0.9" />
               </linearGradient>
               <filter id="gr-glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="2.5" result="b" />
@@ -78,12 +78,12 @@ export function GlobalReach() {
             {pts.map((p) => (
               <g key={p.label}>
                 {!reduce && (
-                  <circle cx={p.x} cy={p.y} r="6" fill="none" stroke={p.home ? "#38e1ff" : "#4d7cfe"} strokeOpacity="0.8">
+                  <circle cx={p.x} cy={p.y} r="6" fill="none" style={{ stroke: p.home ? "var(--color-cyan)" : "var(--color-accent)" }} strokeOpacity="0.8">
                     <animate attributeName="r" values="6;20" dur="2.4s" repeatCount="indefinite" />
                     <animate attributeName="stroke-opacity" values="0.8;0" dur="2.4s" repeatCount="indefinite" />
                   </circle>
                 )}
-                <circle cx={p.x} cy={p.y} r={p.home ? 6 : 4.5} fill={p.home ? "#38e1ff" : "#4d7cfe"} filter="url(#gr-glow)" />
+                <circle cx={p.x} cy={p.y} r={p.home ? 6 : 4.5} style={{ fill: p.home ? "var(--color-cyan)" : "var(--color-accent)" }} filter="url(#gr-glow)" />
                 <circle cx={p.x} cy={p.y} r="2" fill="#fff" fillOpacity="0.95" />
                 <g transform={p.labelSide === "left" ? `translate(${p.x - 12 - (p.label.length * 7.2 + 18)} ${p.y - 12})` : `translate(${p.x + 12} ${p.y - 12})`}>
                   <rect x="0" y="-11" rx="6" width={p.label.length * 7.2 + 18} height="22" fill="rgb(var(--bg)/0.85)" stroke="rgb(var(--fg)/0.12)" />

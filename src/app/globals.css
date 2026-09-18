@@ -14,6 +14,7 @@
   --color-line: rgb(var(--fg)/0.08);
 
   --color-accent: #4d7cfe; /* electric blue */
+  --color-accent-2: #6d8cff; /* mid stop of the primary gradient */
   --color-cyan: #38e1ff;
   --color-violet: #8b5cf6;
   --color-pure-white: #ffffff; /* never remapped — text on accent gradients */
@@ -26,7 +27,7 @@
   --radius-xl2: 1.25rem;
   --radius-xl3: 1.75rem;
 
-  --shadow-glow: 0 0 0 1px rgba(77, 124, 254, 0.35), 0 20px 60px -20px rgba(77, 124, 254, 0.45);
+  --shadow-glow: 0 0 0 1px rgb(var(--accent-rgb)/0.35), 0 20px 60px -20px rgb(var(--accent-rgb)/0.45);
   --shadow-card: 0 1px 0 0 rgb(var(--fg)/0.04) inset, 0 24px 60px -30px rgb(var(--shadow)/0.8);
 
   --animate-blob: blob 22s ease-in-out infinite;
@@ -82,6 +83,10 @@
 :root {
   color-scheme: dark;
   --grid-size: 64px;
+  /* accent RGB triplets for rgb(var(--x)/alpha) usage */
+  --accent-rgb: 77 124 254;
+  --cyan-rgb: 56 225 255;
+  --violet-rgb: 139 92 246;
   --fg: 255 255 255;      /* "white" ink — flips to dark in light mode */
   --bg: 5 5 7;            /* page ground */
   --shadow: 0 0 0;
@@ -162,7 +167,7 @@ body {
 }
 
 ::selection {
-  background: rgba(77, 124, 254, 0.35);
+  background: rgb(var(--accent-rgb)/0.35);
   color: var(--color-fog);
 }
 
@@ -177,7 +182,7 @@ body {
 }
 
 @utility text-gradient {
-  background: linear-gradient(120deg, #38e1ff 0%, #4d7cfe 45%, #8b5cf6 100%);
+  background: linear-gradient(120deg, var(--color-cyan) 0%, var(--color-accent) 45%, var(--color-violet) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -211,7 +216,7 @@ body {
 }
 
 @utility text-gradient-soft {
-  background: linear-gradient(120deg, #ffffff 0%, #c9d6ff 50%, #8fb3ff 100%);
+  background: linear-gradient(120deg, #ffffff 0%, color-mix(in oklab, var(--color-cyan) 40%, white) 50%, var(--color-cyan) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -335,7 +340,7 @@ html.lens:not(.scrolling) .glass-lens {
 }
 
 @utility ring-glow {
-  box-shadow: 0 0 0 1px rgba(77, 124, 254, 0.45), 0 0 40px -8px rgba(77, 124, 254, 0.5);
+  box-shadow: 0 0 0 1px rgb(var(--accent-rgb)/0.45), 0 0 40px -8px rgb(var(--accent-rgb)/0.5);
 }
 
 @utility bg-grid {
@@ -401,7 +406,7 @@ html.scrolling .grain::after { opacity: 0; }
 
 /* Focus */
 :focus-visible {
-  outline: 2px solid rgba(77, 124, 254, 0.8);
+  outline: 2px solid rgb(var(--accent-rgb)/0.8);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -415,4 +420,83 @@ html.scrolling .grain::after { opacity: 0; }
     scroll-behavior: auto !important;
   }
   .flow-line { animation: none; }
+}
+
+/* ───────────── Skins ─────────────
+   Whole-site visual directions, previewed at /lab/themes and applied via
+   <html data-skin="…"> (restored pre-hydration from localStorage, see
+   src/lib/skin.ts). Each block only remaps tokens; components never
+   branch on the skin except the hero (layout + signature backdrop). */
+[data-skin="horizon"] {
+  --color-ink: #03060e;
+  --color-ink-2: #070b17;
+  --color-ink-3: #0c1222;
+  --bg: 3 6 14;
+  --color-accent: #2f6bff;
+  --color-accent-2: #5b8cff;
+  --color-cyan: #8fc7ff;
+  --color-violet: #3556ff;
+  --accent-rgb: 47 107 255;
+  --cyan-rgb: 143 199 255;
+  --violet-rgb: 53 86 255;
+  --blob-a: 0.12;
+  --blob-b: 0.08;
+}
+[data-skin="aurora"] {
+  --color-ink: #03080a;
+  --color-ink-2: #061013;
+  --color-ink-3: #0b181c;
+  --bg: 3 8 10;
+  --color-accent: #22c55e;
+  --color-accent-2: #2dd4bf;
+  --color-cyan: #5eead4;
+  --color-violet: #0ea5e9;
+  --accent-rgb: 34 197 94;
+  --cyan-rgb: 94 234 212;
+  --violet-rgb: 14 165 233;
+}
+[data-skin="mono"] {
+  --color-ink: #050505;
+  --color-ink-2: #0b0b0b;
+  --color-ink-3: #121212;
+  --bg: 5 5 5;
+  --color-accent: #ff5a1f;
+  --color-accent-2: #ff7a45;
+  --color-cyan: #ffffff;
+  --color-violet: #ff5a1f;
+  --accent-rgb: 255 90 31;
+  --cyan-rgb: 255 255 255;
+  --violet-rgb: 255 90 31;
+  --blob-a: 0.06;
+  --blob-b: 0.04;
+  --blob-c: 0.02;
+  --grain: 0.07;
+}
+[data-skin="sunset"] {
+  --color-ink: #0a0507;
+  --color-ink-2: #120910;
+  --color-ink-3: #1a0e16;
+  --bg: 10 5 7;
+  --color-accent: #ff6a3d;
+  --color-accent-2: #f43f8e;
+  --color-cyan: #fbbf24;
+  --color-violet: #d946ef;
+  --accent-rgb: 255 106 61;
+  --cyan-rgb: 251 191 36;
+  --violet-rgb: 217 70 239;
+  --blob-a: 0.2;
+}
+
+/* skin-specific animation helpers */
+@keyframes aurora-drift {
+  0%, 100% { transform: translate3d(-4%, 0, 0) skewX(-8deg) scaleY(1); }
+  50% { transform: translate3d(4%, -3%, 0) skewX(-14deg) scaleY(1.12); }
+}
+.aurora-band { animation: aurora-drift 16s ease-in-out infinite; will-change: transform; }
+.aurora-band:nth-child(2) { animation-duration: 22s; animation-delay: -6s; }
+.aurora-band:nth-child(3) { animation-duration: 27s; animation-delay: -12s; }
+@keyframes sun-lines { from { background-position-y: 0; } to { background-position-y: 48px; } }
+.sun-grid { animation: sun-lines 6s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .aurora-band, .sun-grid { animation: none; }
 }

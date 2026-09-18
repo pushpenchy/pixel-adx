@@ -8,6 +8,7 @@ import type { SceneProps } from "../SceneCanvas";
 import { Panel } from "../Panel";
 import { makeHudTexture, type PanelSpec } from "../textures";
 import { isLiteDevice } from "@/lib/quality";
+import { accentColors } from "../SceneCanvas";
 
 /**
  * Command Deck — a curved wall of holographic campaign dashboards (drawn
@@ -44,7 +45,14 @@ const cells: [number, number][] = [
   [-1, -1],
   [1, -1],
 ];
-const tints = ["#38e1ff", "#5b8cff", "#7d6bff", "#8b5cf6"];
+const defaultTints = ["#38e1ff", "#5b8cff", "#7d6bff", "#8b5cf6"];
+/** hologram pixel tints from the active skin: cyan → accent → violet */
+function skinTints() {
+  if (typeof window === "undefined") return defaultTints;
+  const [cyan, violet, accent] = accentColors();
+  const mid = "#" + new THREE.Color(accent).lerp(new THREE.Color(violet), 0.5).getHexString();
+  return [cyan, accent, mid, violet];
+}
 
 /** One pixel of the hologram: pops in at its own moment. */
 function Pixel({ i, position, reduce, children }: { i: number; position?: [number, number, number]; reduce: boolean; children: React.ReactNode }) {
@@ -67,6 +75,7 @@ function Pixel({ i, position, reduce, children }: { i: number; position?: [numbe
 /** The Pixel mark hologram — pixels pop in one by one, then it turns slowly. */
 function MiniMark({ reduce }: { reduce: boolean }) {
   const g = useRef<THREE.Group>(null);
+  const tints = useMemo(() => skinTints(), []);
   useFrame((_, dt) => {
     if (g.current && !reduce) g.current.rotation.y += dt * 0.6;
   });
@@ -133,6 +142,7 @@ function HudDial({ reduce }: { reduce: boolean }) {
 /** Data links from the hub to each panel — drawn in, with packets travelling out. */
 function Links({ reduce }: { reduce: boolean }) {
   const mat = useRef<THREE.LineBasicMaterial>(null);
+  const accent = useMemo(() => accentColors()[2], []);
   const packets = useRef<THREE.Group>(null);
   const start = useRef<number | null>(null);
   const geo = useMemo(() => {
@@ -158,7 +168,7 @@ function Links({ reduce }: { reduce: boolean }) {
   return (
     <group>
       <lineSegments geometry={geo}>
-        <lineBasicMaterial ref={mat} color="#4d7cfe" transparent opacity={0} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <lineBasicMaterial ref={mat} color={accent} transparent opacity={0} blending={THREE.AdditiveBlending} depthWrite={false} />
       </lineSegments>
       <group ref={packets}>
         {panels.map((_, i) => (
@@ -174,7 +184,12 @@ function Links({ reduce }: { reduce: boolean }) {
 
 export default function DeckScene({ reduce }: SceneProps) {
   const lite = useMemo(() => isLiteDevice(), []);
-  const visible = lite ? panels.filter((p) => p.spec.kind !== "funnel" && p.spec.kind !== "ab") : panels;
+  // panel accents follow the active skin (see accentColors)
+  const visible = useMemo(() => {
+    const [cyan, violet, accent] = accentColors();
+    const map: Record<string, string> = { "#38e1ff": cyan, "#8b5cf6": violet, "#4d7cfe": accent };
+    return (lite ? panels.filter((p) => p.spec.kind !== "funnel" && p.spec.kind !== "ab") : panels).map((p) => ({ ...p, spec: { ...p.spec, accent: map[p.spec.accent ?? ""] ?? p.spec.accent } }));
+  }, [lite]);
   return (
     <group scale={1.08} position={[0, 0.2, 0]}>
       {visible.map((p, i) => (

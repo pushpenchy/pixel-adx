@@ -16,6 +16,22 @@ import { AutoFit } from "./AutoFit";
 
 export type SceneProps = { reduce: boolean; light: boolean };
 
+/** Accent colours from the active skin's CSS tokens (three.js can't read var()). */
+export function accentColors(): [string, string, string] {
+  if (typeof window === "undefined") return ["#38e1ff", "#8b5cf6", "#4d7cfe"];
+  const cs = getComputedStyle(document.documentElement);
+  // normalise to 6-digit hex: the CSS is minified (#fff) and textures append alpha bytes
+  const hex = (name: string, fallback: string) => {
+    const v = cs.getPropertyValue(name).trim();
+    try {
+      return "#" + new THREE.Color(v || fallback).getHexString();
+    } catch {
+      return fallback;
+    }
+  };
+  return [hex("--color-cyan", "#38e1ff"), hex("--color-violet", "#8b5cf6"), hex("--color-accent", "#4d7cfe")];
+}
+
 /** Deterministic PRNG (mulberry32) — stable layouts, no impure calls in render. */
 export function rng(seed: number) {
   return () => {
@@ -153,6 +169,7 @@ export function SceneCanvas({
   // lite tier (phones / low-core): no bloom or sparkles, fewer particles — but
   // still native pixel ratio (capped at 2) and MSAA, so nothing looks soft
   const lite = useMemo(() => isLiteDevice(), []);
+  const [tintA, tintB, tintC] = useMemo(() => accentColors(), []);
   const maxDpr = Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 2);
   const [dpr, setDpr] = useState(maxDpr);
   const [bloom, setBloom] = useState(!lite);
@@ -228,13 +245,13 @@ export function SceneCanvas({
 
       <ambientLight intensity={light ? 0.8 : 0.35} />
       <directionalLight position={[4, 6, 6]} intensity={1.6} />
-      <pointLight position={[-6, 3, 4]} intensity={35} color="#38e1ff" />
-      <pointLight position={[6, -3, 3]} intensity={35} color="#8b5cf6" />
+      <pointLight position={[-6, 3, 4]} intensity={35} color={tintA} />
+      <pointLight position={[6, -3, 3]} intensity={35} color={tintB} />
 
       <Environment resolution={256} frames={1}>
         <Lightformer intensity={3} position={[0, 6, -8]} scale={[12, 6, 1]} color="#dfe8ff" />
-        <Lightformer intensity={3} position={[-8, 2, 2]} rotation={[0, Math.PI / 2, 0]} scale={[6, 6, 1]} color="#38e1ff" />
-        <Lightformer intensity={3} position={[8, -2, 2]} rotation={[0, -Math.PI / 2, 0]} scale={[6, 6, 1]} color="#8b5cf6" />
+        <Lightformer intensity={3} position={[-8, 2, 2]} rotation={[0, Math.PI / 2, 0]} scale={[6, 6, 1]} color={tintA} />
+        <Lightformer intensity={3} position={[8, -2, 2]} rotation={[0, -Math.PI / 2, 0]} scale={[6, 6, 1]} color={tintB} />
         <Lightformer intensity={1.5} position={[0, -6, 4]} scale={[10, 4, 1]} color="#ffffff" />
       </Environment>
 
@@ -262,10 +279,10 @@ export function SceneCanvas({
           args={[60, 60]}
           cellSize={0.6}
           cellThickness={0.7}
-          cellColor={light ? "#aab6d3" : "#1c2440"}
+          cellColor={light ? "#aab6d3" : new THREE.Color(tintC).multiplyScalar(0.28)}
           sectionSize={3}
           sectionThickness={1.1}
-          sectionColor={light ? "#6d8fff" : "#2f4aa8"}
+          sectionColor={light ? "#6d8fff" : new THREE.Color(tintC).multiplyScalar(0.62)}
           fadeDistance={34}
           fadeStrength={1.6}
           infiniteGrid

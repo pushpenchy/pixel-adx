@@ -39,14 +39,14 @@ export function Technology() {
         <div className="absolute left-0 right-0 top-[22px] hidden h-px bg-white/10 lg:block">
           <motion.div
             style={{ scaleX: reduce ? 1 : progress, transformOrigin: "left" }}
-            className="h-full w-full bg-[linear-gradient(90deg,#38e1ff,#4d7cfe,#8b5cf6)] shadow-[0_0_16px_rgba(77,124,254,0.7)]"
+            className="h-full w-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-accent),var(--color-violet))] shadow-[0_0_16px_rgb(var(--accent-rgb)/0.7)]"
           />
         </div>
         {/* mobile: vertical track */}
         <div className="absolute bottom-0 left-[22px] top-0 w-px bg-white/10 lg:hidden">
           <motion.div
             style={{ scaleY: reduce ? 1 : progress, transformOrigin: "top" }}
-            className="h-full w-full bg-[linear-gradient(180deg,#38e1ff,#4d7cfe,#8b5cf6)] shadow-[0_0_16px_rgba(77,124,254,0.7)]"
+            className="h-full w-full bg-[linear-gradient(180deg,var(--color-cyan),var(--color-accent),var(--color-violet))] shadow-[0_0_16px_rgb(var(--accent-rgb)/0.7)]"
           />
         </div>
 
@@ -117,7 +117,7 @@ function Stage({
       >
         <span className="relative">{String(index + 1).padStart(2, "0")}</span>
         {/* lit layer sits on top so the number stays white on the gradient in both themes */}
-        <motion.span style={{ opacity: reduce ? 1 : glow }} className="absolute inset-0 grid place-items-center rounded-full bg-[linear-gradient(135deg,#38e1ff,#4d7cfe,#8b5cf6)] text-pure-white shadow-[0_0_24px_rgba(77,124,254,0.6)]">
+        <motion.span style={{ opacity: reduce ? 1 : glow }} className="absolute inset-0 grid place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-cyan),var(--color-accent),var(--color-violet))] text-pure-white shadow-[0_0_24px_rgb(var(--accent-rgb)/0.6)]">
           {String(index + 1).padStart(2, "0")}
         </motion.span>
       </motion.span>

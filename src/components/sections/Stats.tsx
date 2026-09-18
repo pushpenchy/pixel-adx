@@ -21,7 +21,7 @@ export function Stats() {
                 {s.value}
               </p>
               <p className="mt-2 text-sm text-mute">{s.label}</p>
-              <span aria-hidden className="absolute bottom-0 left-0 h-px w-0 bg-[linear-gradient(90deg,#38e1ff,#8b5cf6)] transition-all duration-500 group-hover:w-full lg:-bottom-px" />
+              <span aria-hidden className="absolute bottom-0 left-0 h-px w-0 bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))] transition-all duration-500 group-hover:w-full lg:-bottom-px" />
             </motion.div>
           ))}
         </Stagger>

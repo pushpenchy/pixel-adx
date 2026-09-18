@@ -15,7 +15,7 @@ type Ctx = { theme: Theme };
 const ThemeContext = createContext<Ctx>({ theme: "dark" });
 
 /** Runs before hydration: pin dark and clear any stored light preference. */
-export const themeInitScript = `(function(){try{document.documentElement.dataset.theme="dark";localStorage.removeItem("${THEME_KEY}");}catch(e){}})();`;
+export const themeInitScript = `(function(){try{document.documentElement.dataset.theme="dark";localStorage.removeItem("${THEME_KEY}");var s=localStorage.getItem("px-skin");if(s&&s!=="nebula")document.documentElement.dataset.skin=s;}catch(e){}})();`;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {

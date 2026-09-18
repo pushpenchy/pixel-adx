@@ -13,7 +13,7 @@ const art: Record<string, string[]> = {
   handshake: ["M20 80 C 20 50, 60 50, 80 80 S 140 110, 140 80 S 100 50, 80 80 S 20 110, 20 80", "M40 80 a6 6 0 1 0 12 0 a6 6 0 1 0 -12 0", "M108 80 a6 6 0 1 0 12 0 a6 6 0 1 0 -12 0"],
 };
 
-const tints = ["#38e1ff", "#4d7cfe", "#8b5cf6", "#22d3ee"];
+const tints = ["var(--color-cyan)", "var(--color-accent)", "var(--color-violet)", "#22d3ee"];
 
 /**
  * Sticky stacking cards: each card pins under the previous one and scales
@@ -70,7 +70,7 @@ function StackCard({
     >
       <div
         className="crystal relative overflow-hidden rounded-[2rem] border border-white/10 bg-ink-2 p-8 sm:p-12 lg:p-14"
-        style={{ background: `linear-gradient(135deg, ${tints[index]}14, rgb(var(--bg)) 55%)` }}
+        style={{ background: `linear-gradient(135deg, color-mix(in srgb, ${tints[index]} 8%, transparent), rgb(var(--bg)) 55%)` }}
       >
         <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 bg-ink" />
         <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-center">
@@ -84,7 +84,7 @@ function StackCard({
             </h3>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-mute sm:text-lg">{w.description}</p>
           </div>
-          <svg viewBox="0 0 160 160" className="h-40 w-40 justify-self-start lg:h-60 lg:w-60 lg:justify-self-end" fill="none" stroke={tints[index]} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <svg viewBox="0 0 160 160" className="h-40 w-40 justify-self-start lg:h-60 lg:w-60 lg:justify-self-end" fill="none" style={{ stroke: tints[index] }} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             {art[w.icon].map((d, k) => (
               <motion.path
                 key={k}

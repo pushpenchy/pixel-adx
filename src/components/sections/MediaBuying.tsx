@@ -85,7 +85,7 @@ export function MediaBuying() {
 
         {/* Dashboard mockup */}
         <Reveal delay={0.1} className="relative">
-          <div aria-hidden className="absolute -inset-6 rounded-[2rem] bg-[radial-gradient(closest-side,rgba(77,124,254,0.18),transparent)] blur-2xl" />
+          <div aria-hidden className="absolute -inset-6 rounded-[2rem] bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.18),transparent)] blur-2xl" />
           <div className="glass glass-strong relative overflow-hidden rounded-xl3">
             {/* window chrome */}
             <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-3">
@@ -122,12 +122,12 @@ export function MediaBuying() {
                 <svg viewBox={`0 0 ${W} ${H}`} className="mt-3 h-28 w-full" preserveAspectRatio="none" aria-hidden>
                   <defs>
                     <linearGradient id="mb-area" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stopColor="#4d7cfe" stopOpacity="0.45" />
-                      <stop offset="1" stopColor="#4d7cfe" stopOpacity="0" />
+                      <stop offset="0" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0.45" />
+                      <stop offset="1" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0" />
                     </linearGradient>
                     <linearGradient id="mb-stroke" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0" stopColor="#38e1ff" />
-                      <stop offset="1" stopColor="#8b5cf6" />
+                      <stop offset="0" style={{ stopColor: "var(--color-cyan)" }} />
+                      <stop offset="1" style={{ stopColor: "var(--color-violet)" }} />
                     </linearGradient>
                   </defs>
                   {[0.25, 0.5, 0.75].map((g) => (
@@ -165,7 +165,7 @@ export function MediaBuying() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.2 + i * 0.07, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                       style={{ height: `${b}%`, transformOrigin: "bottom" }}
-                      className="flex-1 rounded-t-md bg-[linear-gradient(180deg,#6d8cff,rgba(77,124,254,0.25))]"
+                      className="flex-1 rounded-t-md bg-[linear-gradient(180deg,var(--color-accent-2),rgb(var(--accent-rgb)/0.25))]"
                     />
                   ))}
                 </div>

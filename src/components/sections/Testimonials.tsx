@@ -67,7 +67,7 @@ export function Testimonials() {
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <figcaption className="mt-8">
-                  <div className="mx-auto mb-3 size-12 rounded-full bg-[linear-gradient(135deg,#38e1ff,#4d7cfe,#8b5cf6)] p-px">
+                  <div className="mx-auto mb-3 size-12 rounded-full bg-[linear-gradient(135deg,var(--color-cyan),var(--color-accent),var(--color-violet))] p-px">
                     <div className="grid h-full w-full place-items-center rounded-full bg-ink text-sm font-bold text-white">
                       {t.name.split(" ").map((w) => w[0]).join("").slice(0, 2)}
                     </div>
@@ -95,7 +95,7 @@ export function Testimonials() {
                   onClick={() => setIndex([i, i > index ? 1 : -1])}
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-400",
-                    i === index ? "w-7 bg-[linear-gradient(90deg,#38e1ff,#8b5cf6)]" : "w-1.5 bg-white/20 hover:bg-white/40"
+                    i === index ? "w-7 bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))]" : "w-1.5 bg-white/20 hover:bg-white/40"
                   )}
                 />
               ))}

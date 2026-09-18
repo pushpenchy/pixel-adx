@@ -18,9 +18,9 @@ const files = [
 
 const colors = [
   ["Ink", "#050507"],
-  ["Electric Blue", "#4d7cfe"],
-  ["Cyan", "#38e1ff"],
-  ["Violet", "#8b5cf6"],
+  ["Electric Blue", "var(--color-accent)"],
+  ["Cyan", "var(--color-cyan)"],
+  ["Violet", "var(--color-violet)"],
   ["Fog", "#f5f7fb"],
 ];
 
@@ -52,7 +52,7 @@ export default function BrandPage() {
         <div className="grid min-h-[220px] place-items-center rounded-xl3 border border-white/10 bg-ink-2 text-white">
           <Logo markSize={56} tone="mono" id="b3" />
         </div>
-        <div className="grid min-h-[220px] place-items-center rounded-xl3 border border-white/10 bg-[linear-gradient(135deg,#38e1ff,#4d7cfe,#8b5cf6)] text-pure-white">
+        <div className="grid min-h-[220px] place-items-center rounded-xl3 border border-white/10 bg-[linear-gradient(135deg,var(--color-cyan),var(--color-accent),var(--color-violet))] text-pure-white">
           <Logo markSize={56} tone="mono" id="b4" />
         </div>
       </div>
@@ -84,8 +84,8 @@ export default function BrandPage() {
           </div>
         ))}
         <div className="overflow-hidden rounded-xl2 border border-white/10 sm:col-span-5">
-          <div className="h-16 bg-[linear-gradient(120deg,#38e1ff,#4d7cfe_45%,#8b5cf6)]" />
-          <div className="bg-ink-2 px-3 py-2.5 text-xs text-white/60">Brand gradient · 120° · #38e1ff → #4d7cfe → #8b5cf6</div>
+          <div className="h-16 bg-[linear-gradient(120deg,var(--color-cyan),var(--color-accent)_45%,var(--color-violet))]" />
+          <div className="bg-ink-2 px-3 py-2.5 text-xs text-white/60">Brand gradient · 120° · var(--color-cyan) → var(--color-accent) → var(--color-violet)</div>
         </div>
       </div>
 

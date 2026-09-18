@@ -6,6 +6,7 @@ import { PerformanceMonitor, PerspectiveCamera, View } from "@react-three/drei";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { AutoFit } from "./AutoFit";
+import { accentColors } from "./SceneCanvas";
 
 /**
  * One WebGL context rendering into many DOM cards via drei <View>.
@@ -76,14 +77,15 @@ export type FitSpec = { w?: number; h?: number; y?: number; max?: number };
 
 /** A card's view: its own camera and lights, environment shared, content framed by its bounds. */
 export function SceneView({ track, cameraZ = 7.0, fit, children }: { track: RefObject<HTMLElement | null>; cameraZ?: number; fit?: FitSpec; children: ReactNode }) {
+  const [tintA, tintB] = useMemo(() => accentColors(), []);
   return (
     <View track={track as RefObject<HTMLElement>}>
       <PerspectiveCamera makeDefault position={[0, 0.7, cameraZ]} fov={34} />
       <SharedEnv intensity={0.9} />
       <ambientLight intensity={0.35} />
       <directionalLight position={[4, 6, 6]} intensity={1.3} />
-      <pointLight position={[-5, 3, 4]} intensity={26} color="#38e1ff" />
-      <pointLight position={[5, -3, 3]} intensity={26} color="#8b5cf6" />
+      <pointLight position={[-5, 3, 4]} intensity={26} color={tintA} />
+      <pointLight position={[5, -3, 3]} intensity={26} color={tintB} />
       <AutoFit w={fit?.w ?? 0.78} h={fit?.h ?? 0.56} y={fit?.y ?? 0.14} max={fit?.max ?? 1.2}>
         {children}
       </AutoFit>

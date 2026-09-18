@@ -48,7 +48,7 @@ function Lab() {
                   <span className="block text-[12px] text-mute">{c.blurb}</span>
                 </span>
                 {on && (
-                  <span className="grid size-6 place-items-center rounded-full bg-[linear-gradient(135deg,#38e1ff,#8b5cf6)] text-pure-white">
+                  <span className="grid size-6 place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-cyan),var(--color-violet))] text-pure-white">
                     <Check className="size-3.5" strokeWidth={3} />
                   </span>
                 )}

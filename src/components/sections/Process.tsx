@@ -45,7 +45,7 @@ export function Process() {
           <div className="absolute bottom-6 left-[23px] top-6 w-px bg-white/10">
             <motion.div
               style={{ scaleY: reduce ? 1 : line, transformOrigin: "top" }}
-              className="h-full w-full bg-[linear-gradient(180deg,#38e1ff,#4d7cfe,#8b5cf6)] shadow-[0_0_14px_rgba(77,124,254,0.7)]"
+              className="h-full w-full bg-[linear-gradient(180deg,var(--color-cyan),var(--color-accent),var(--color-violet))] shadow-[0_0_14px_rgb(var(--accent-rgb)/0.7)]"
             />
           </div>
 
@@ -65,7 +65,7 @@ export function Process() {
                   className={cn(
                     "relative z-[1] grid size-12 shrink-0 place-items-center rounded-full border font-display text-sm font-bold transition-all duration-500 shadow-[0_0_0_6px_rgb(var(--bg)/1)]",
                     isActive
-                      ? "border-transparent bg-[linear-gradient(135deg,#38e1ff,#4d7cfe,#8b5cf6)] text-pure-white shadow-[0_0_0_6px_rgb(var(--bg)/1),0_0_30px_rgba(77,124,254,0.7)] scale-110"
+                      ? "border-transparent bg-[linear-gradient(135deg,var(--color-cyan),var(--color-accent),var(--color-violet))] text-pure-white shadow-[0_0_0_6px_rgb(var(--bg)/1),0_0_30px_rgb(var(--accent-rgb)/0.7)] scale-110"
                       : done
                         ? "border-accent/50 bg-ink text-white"
                         : "border-white/12 bg-ink text-white/50"
