@@ -16,7 +16,8 @@ export function LiquidLens() {
     const chromium = ua.includes("Chrome/") && !ua.includes("Firefox"); // Safari and iOS browsers never carry "Chrome/"
     const supported = typeof CSS !== "undefined" && CSS.supports("backdrop-filter", "url(#px-lens)");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (chromium && supported && !reduce) document.documentElement.classList.add("lens");
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    if (chromium && supported && !reduce && finePointer) document.documentElement.classList.add("lens");
 
     // Cursor-tracked specular highlight on any .glass surface — one delegated
     // listener, writes two CSS vars, no per-element JS. Fine pointers only.

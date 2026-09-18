@@ -13,7 +13,7 @@ export function TextTicker({ items, className, reverse }: { items: string[]; cla
           <span key={i} className="flex items-center">
             <span
               className={cn(
-                "whitespace-nowrap px-6 font-display text-[2.6rem] font-extrabold uppercase leading-none tracking-[-0.03em] sm:text-6xl lg:text-7xl",
+                "whitespace-nowrap px-5 font-display text-[2rem] font-extrabold uppercase leading-none tracking-[-0.03em] sm:text-6xl lg:text-7xl",
                 i % 2 ? "text-outline-thin" : "text-white"
               )}
             >

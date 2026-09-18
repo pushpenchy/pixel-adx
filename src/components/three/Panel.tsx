@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { makeFeedLinesTexture, makePanelTexture, makeScanTexture, PANEL_SIZE, type PanelSpec } from "./textures";
+import { isLiteDevice } from "@/lib/quality";
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 
@@ -30,7 +31,8 @@ export function Panel({
   delay?: number;
   reduce: boolean;
 }) {
-  const tex = useMemo(() => makePanelTexture(spec), [spec]);
+  const lite = useMemo(() => isLiteDevice(), []);
+  const tex = useMemo(() => makePanelTexture(spec, lite ? 0.5 : 1), [spec, lite]);
   const scan = useMemo(() => makeScanTexture(), []);
   useEffect(
     () => () => {
@@ -111,10 +113,12 @@ export function Panel({
         </mesh>
       )}
       {/* holographic scan sweep */}
+      {!lite && (
       <mesh position={[0, 0, 0.01]}>
         <planeGeometry args={[width, h]} />
         <meshBasicMaterial ref={scanMat} map={scan} transparent opacity={0.2} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
       </mesh>
+      )}
       {/* glowing edge */}
       <lineSegments geometry={edges}>
         <lineBasicMaterial ref={edgeMat} color="#9cc2ff" transparent opacity={0.4} blending={THREE.AdditiveBlending} toneMapped={false} />

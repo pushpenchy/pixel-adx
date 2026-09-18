@@ -28,7 +28,7 @@ export function Section({
 export function Eyebrow({ children, index, className }: { children: ReactNode; index?: string; className?: string }) {
   return (
     <span className={cn("label-mono inline-flex items-center gap-3", className)}>
-      {index && <span className="text-white/70">( {index} )</span>}
+      {index && <span className="whitespace-nowrap text-white/70">( {index} )</span>}
       <span className="h-px w-8 bg-white/25" aria-hidden />
       {children}
     </span>
@@ -62,7 +62,7 @@ export function SectionHeading({
   const heading = (
     <h2
       className={cn(
-        "font-display text-[2.6rem] font-extrabold leading-[0.98] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl",
+        "font-display text-[2.2rem] font-extrabold leading-[1] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl",
         titleClassName
       )}
     >

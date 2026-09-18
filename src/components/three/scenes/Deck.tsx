@@ -7,6 +7,7 @@ import * as THREE from "three";
 import type { SceneProps } from "../SceneCanvas";
 import { Panel } from "../Panel";
 import { makeHudTexture, type PanelSpec } from "../textures";
+import { isLiteDevice } from "@/lib/quality";
 
 /**
  * Command Deck — a curved wall of holographic campaign dashboards (drawn
@@ -172,9 +173,11 @@ function Links({ reduce }: { reduce: boolean }) {
 }
 
 export default function DeckScene({ reduce }: SceneProps) {
+  const lite = useMemo(() => isLiteDevice(), []);
+  const visible = lite ? panels.filter((p) => p.spec.kind !== "funnel" && p.spec.kind !== "ab") : panels;
   return (
     <group scale={1.08} position={[0, 0.2, 0]}>
-      {panels.map((p, i) => (
+      {visible.map((p, i) => (
         <Panel key={i} spec={p.spec} position={p.position} rotation={p.rotation} width={p.width} phase={i * 1.7} delay={p.delay} reduce={reduce} />
       ))}
       <Links reduce={reduce} />

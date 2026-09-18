@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Grid, Lightformer, PerformanceMonitor, Sparkles } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { isLiteDevice } from "@/lib/quality";
 
 /**
  * Shared stage for every hero concept: lights, studio environment, grid
@@ -109,10 +110,12 @@ export function SceneCanvas({
   particles = true,
   bloomIntensity = 1,
 }: SceneCanvasProps) {
+  // lite tier (phones / low-core): 1× render, no bloom, fewer particles
+  const lite = useMemo(() => isLiteDevice(), []);
   // render at the device ratio (capped) — supersampling a 1× screen is pure waste
-  const maxDpr = Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5);
+  const maxDpr = lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5);
   const [dpr, setDpr] = useState(maxDpr);
-  const [bloom, setBloom] = useState(true);
+  const [bloom, setBloom] = useState(!lite);
   // Start sampling only after shaders have compiled, otherwise the first-frame
   // hitch registers as a permanent "slow device" verdict.
   const [warm, setWarm] = useState(false);
@@ -139,7 +142,7 @@ export function SceneCanvas({
           }}
           onIncline={() => setDpr(maxDpr)}
           flipflops={3}
-          bounds={() => [40, 58]}
+          bounds={() => (lite ? [30, 50] : [40, 58])}
           ms={300}
           iterations={8}
         />
@@ -159,7 +162,7 @@ export function SceneCanvas({
 
       <Fit size={size} offset={offset}>
         {children}
-        {sparkles && <Sparkles count={70} scale={[12, 7, 7]} size={2.2} speed={reduce ? 0 : 0.35} opacity={0.4} color="#bfd4ff" />}
+        {sparkles && !lite && <Sparkles count={70} scale={[12, 7, 7]} size={2.2} speed={reduce ? 0 : 0.35} opacity={0.4} color="#bfd4ff" />}
       </Fit>
 
       {grid && (
@@ -178,10 +181,10 @@ export function SceneCanvas({
         />
       )}
 
-      {particles && <Particles />}
+      {particles && <Particles count={lite ? 180 : 420} />}
       {!reduce && <CameraRig base={camera} look={look} />}
 
-      {bloom && (
+      {bloom && !lite && (
         <EffectComposer multisampling={0} enableNormalPass={false}>
           <Bloom mipmapBlur intensity={(light ? 0.5 : 1.0) * bloomIntensity} luminanceThreshold={0.82} luminanceSmoothing={0.25} radius={0.7} levels={6} />
         </EffectComposer>

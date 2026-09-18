@@ -78,6 +78,9 @@ function Lab() {
           <p className="label-mono mt-6 normal-case tracking-normal">
             Pick one and tell me its name — it becomes the hero and gets the full polish pass. Direct link: <code className="text-white/70">/lab?scene={active}</code>
           </p>
+          <Link href="/lab/services" className="glass liquid-press mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white">
+            Services section concepts →
+          </Link>
         </div>
       </div>
     </main>

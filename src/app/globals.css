@@ -375,6 +375,12 @@ html.lens:not(.scrolling) .glass-lens {
 /* Grain is hidden while scrolling — a fixed full-page texture is repainted every scroll frame */
 html.scrolling .grain::after { opacity: 0; }
 
+/* Phones: cheaper glass, no grain overlay */
+@media (max-width: 767px), (pointer: coarse) {
+  :root { --glass-blur: 8px; --glass-sat: 150%; }
+  .grain::after { display: none; }
+}
+
 /* Theme switch transition — colours only, never layout */
 .theme-transition, .theme-transition * { transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease !important; }
 

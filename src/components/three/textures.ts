@@ -79,9 +79,10 @@ function drawLogo(ctx: CanvasRenderingContext2D, key: LogoKey, x: number, y: num
 }
 
 /** A glassy dashboard card: title, big metric, delta, and a mini chart. */
-export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", seed = 3 }: PanelSpec) {
+export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", seed = 3 }: PanelSpec, scale = 1) {
   const [W, H] = PANEL_SIZE[kind];
-  const { c, ctx } = canvas(W, H);
+  const { c, ctx } = canvas(Math.round(W * scale), Math.round(H * scale));
+  ctx.scale(scale, scale); // draw in 1× coordinates, rasterize at `scale`
   const rand = seeded(seed);
 
   // glass body
@@ -565,4 +566,202 @@ export function makeFeedLinesTexture() {
   tex.wrapS = THREE.ClampToEdgeWrapping;
   tex.wrapT = THREE.RepeatWrapping;
   return tex;
+}
+
+/** A platform logo on a rounded glass tile (for the media-buying scene). */
+export function makeLogoTileTexture(key: LogoKey) {
+  const S = 256;
+  const { c, ctx } = canvas(S, S);
+  roundRect(ctx, 4, 4, S - 8, S - 8, 56);
+  const g = ctx.createLinearGradient(0, 0, S, S);
+  g.addColorStop(0, "rgba(40,50,96,0.95)");
+  g.addColorStop(1, "rgba(12,15,32,0.95)");
+  ctx.fillStyle = g;
+  ctx.fill();
+  ctx.strokeStyle = "rgba(190,205,255,0.35)";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  drawLogo(ctx, key, S / 2 - 64, S / 2 - 64, 128);
+  return toTexture(c);
+}
+
+/** A browser window mock: chrome bar + a landing page with hero, cards and a CTA. */
+export function makeBrowserTexture() {
+  const W = 1024;
+  const H = 700;
+  const { c, ctx } = canvas(W, H);
+  roundRect(ctx, 0, 0, W, H, 36);
+  ctx.fillStyle = "#0d1126";
+  ctx.fill();
+  // chrome
+  ctx.fillStyle = "#151a34";
+  roundRect(ctx, 0, 0, W, 64, 36);
+  ctx.fill();
+  ctx.fillRect(0, 32, W, 32);
+  ["#ff6b6b", "#ffd166", "#34d399"].forEach((col, i) => {
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(40 + i * 30, 32, 9, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  roundRect(ctx, 150, 18, 520, 28, 14);
+  ctx.fillStyle = "rgba(255,255,255,0.08)";
+  ctx.fill();
+  // nav
+  ctx.fillStyle = "rgba(255,255,255,0.7)";
+  roundRect(ctx, 60, 100, 80, 16, 8);
+  ctx.fill();
+  [260, 340, 420, 500].forEach((x) => {
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    roundRect(ctx, x, 100, 50, 14, 7);
+    ctx.fill();
+  });
+  roundRect(ctx, W - 200, 90, 140, 36, 18);
+  const cta = ctx.createLinearGradient(W - 200, 0, W - 60, 0);
+  cta.addColorStop(0, "#4d7cfe");
+  cta.addColorStop(1, "#8b5cf6");
+  ctx.fillStyle = cta;
+  ctx.fill();
+  // hero text
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, 60, 190, 480, 34, 12);
+  ctx.fill();
+  roundRect(ctx, 60, 240, 360, 34, 12);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.4)";
+  roundRect(ctx, 60, 300, 400, 12, 6);
+  ctx.fill();
+  roundRect(ctx, 60, 322, 300, 12, 6);
+  ctx.fill();
+  // hero visual
+  const hv = ctx.createLinearGradient(620, 180, W - 60, 380);
+  hv.addColorStop(0, "#38e1ff");
+  hv.addColorStop(1, "#8b5cf6");
+  ctx.fillStyle = hv;
+  roundRect(ctx, 620, 170, W - 680, 220, 28);
+  ctx.fill();
+  // cards
+  for (let i = 0; i < 3; i++) {
+    const x = 60 + i * 310;
+    roundRect(ctx, x, 440, 280, 200, 24);
+    ctx.fillStyle = "rgba(255,255,255,0.06)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = ["#38e1ff", "#4d7cfe", "#8b5cf6"][i];
+    roundRect(ctx, x + 24, 464, 44, 44, 12);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
+    roundRect(ctx, x + 24, 536, 160, 14, 7);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    roundRect(ctx, x + 24, 566, 220, 10, 5);
+    ctx.fill();
+    roundRect(ctx, x + 24, 586, 180, 10, 5);
+    ctx.fill();
+  }
+  return toTexture(c);
+}
+
+/** Wireframe UI layer for the UI/UX scene: `layer` 0 = frame, 1 = layout blocks, 2 = content. */
+export function makeWireframeTexture(layer: 0 | 1 | 2) {
+  const W = 640;
+  const H = 440;
+  const { c, ctx } = canvas(W, H);
+  ctx.clearRect(0, 0, W, H);
+  const col = ["#9cc2ff", "#38e1ff", "#c4b5fd"][layer];
+  ctx.strokeStyle = col;
+  ctx.fillStyle = col;
+  ctx.lineWidth = 3;
+  ctx.setLineDash(layer === 0 ? [] : [10, 8]);
+  if (layer === 0) {
+    roundRect(ctx, 4, 4, W - 8, H - 8, 30);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 0.25;
+    roundRect(ctx, 4, 4, W - 8, H - 8, 30);
+    ctx.fillStyle = "#1b2650";
+    ctx.fill();
+  } else if (layer === 1) {
+    roundRect(ctx, 30, 30, W - 60, 70, 14);
+    ctx.stroke();
+    roundRect(ctx, 30, 130, 360, 270, 14);
+    ctx.stroke();
+    roundRect(ctx, 420, 130, W - 450, 120, 14);
+    ctx.stroke();
+    roundRect(ctx, 420, 280, W - 450, 120, 14);
+    ctx.stroke();
+  } else {
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 0.9;
+    roundRect(ctx, 50, 50, 120, 30, 10);
+    ctx.fill();
+    roundRect(ctx, 50, 160, 300, 22, 8);
+    ctx.fill();
+    ctx.globalAlpha = 0.5;
+    roundRect(ctx, 50, 200, 260, 14, 6);
+    ctx.fill();
+    roundRect(ctx, 50, 226, 200, 14, 6);
+    ctx.fill();
+    ctx.globalAlpha = 0.9;
+    roundRect(ctx, 50, 330, 150, 44, 22);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(510, 190, 40, 0, Math.PI * 2);
+    ctx.fill();
+    roundRect(ctx, 440, 300, 150, 16, 8);
+    ctx.fill();
+  }
+  return toTexture(c);
+}
+
+/** E-commerce product card: image placeholder, title, price, add-to-cart. */
+export function makeProductTexture() {
+  const W = 620;
+  const H = 780;
+  const { c, ctx } = canvas(W, H);
+  roundRect(ctx, 0, 0, W, H, 40);
+  ctx.fillStyle = "#12172e";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(190,205,255,0.3)";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  const img = ctx.createLinearGradient(30, 30, W - 30, 420);
+  img.addColorStop(0, "#38e1ff");
+  img.addColorStop(1, "#8b5cf6");
+  ctx.fillStyle = img;
+  roundRect(ctx, 30, 30, W - 60, 400, 30);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.35)";
+  ctx.beginPath();
+  ctx.arc(W / 2, 230, 110, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#34d399";
+  roundRect(ctx, 50, 50, 120, 40, 20);
+  ctx.fill();
+  ctx.fillStyle = "#0a0b10";
+  ctx.font = `800 22px ${FONT}`;
+  ctx.fillText("NEW", 84, 78);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = `700 40px ${FONT}`;
+  ctx.fillText("Product name", 40, 500);
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.font = `500 26px ${FONT}`;
+  ctx.fillText("★★★★★  4.9 · 2,318 reviews", 40, 545);
+  ctx.fillStyle = "#38e1ff";
+  ctx.font = `800 56px ${FONT}`;
+  ctx.fillText("$129", 40, 630);
+  roundRect(ctx, 40, 670, W - 80, 76, 38);
+  const cta = ctx.createLinearGradient(40, 0, W - 40, 0);
+  cta.addColorStop(0, "#4d7cfe");
+  cta.addColorStop(1, "#8b5cf6");
+  ctx.fillStyle = cta;
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.font = `700 30px ${FONT}`;
+  ctx.textAlign = "center";
+  ctx.fillText("Add to cart", W / 2, 718);
+  ctx.textAlign = "left";
+  return toTexture(c);
 }

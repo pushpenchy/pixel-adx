@@ -17,7 +17,7 @@ export function Stats() {
               className="group relative border-b border-white/10 px-1 pb-8 pt-7 sm:pb-10 lg:border-b-0 lg:px-6 lg:first:pl-0"
             >
               <span className="label-mono text-white/40">0{i + 1}</span>
-              <p className="mt-4 font-display text-3xl font-extrabold tracking-[-0.04em] text-white sm:text-4xl lg:text-[2.75rem] lg:leading-none">
+              <p className="mt-4 font-display text-xl font-extrabold tracking-[-0.04em] text-white sm:text-4xl lg:text-[2.75rem] lg:leading-none">
                 {s.value}
               </p>
               <p className="mt-2 text-sm text-mute">{s.label}</p>

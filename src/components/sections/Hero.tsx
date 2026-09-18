@@ -71,10 +71,13 @@ export function Hero() {
       <div className="container-x relative flex min-h-[100svh] flex-col justify-end pb-16 pt-[52vh] sm:pt-[60vh] lg:justify-center lg:py-32 lg:pt-40">
         <motion.div style={{ y: yText, opacity: fade }} className="relative max-w-[46rem]">
           <motion.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease }}>
-            <Eyebrow index="00">AdTech &amp; Digital Technology · Bangladesh</Eyebrow>
+            <Eyebrow index="00">
+              <span className="hidden sm:inline">AdTech &amp; Digital Technology · Bangladesh</span>
+              <span className="sm:hidden">AdTech &amp; Digital</span>
+            </Eyebrow>
           </motion.div>
 
-          <h1 className="mt-7 font-display text-[3rem] font-extrabold leading-[0.96] tracking-[-0.045em] text-white sm:text-[4.4rem] lg:text-[5.2rem] xl:text-[6rem]">
+          <h1 className="mt-6 font-display text-[2.45rem] font-extrabold leading-[0.98] tracking-[-0.045em] text-white sm:text-[4.4rem] lg:text-[5.2rem] xl:text-[6rem]">
             {[
               <span key="1">{l1}</span>,
               <span key="2">
