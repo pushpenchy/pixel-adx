@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -21,9 +21,15 @@ export function ServicesStage() {
   const reduce = useReducedMotion();
   const [sel, setSel] = useState<{ cur: ServiceIcon; prev: ServiceIcon | null }>({ cur: "adtech", prev: null });
   const timer = useRef<number | null>(null);
-  // the WebGL stage mounts once the card is within a screen of the viewport, and then stays
+  // the WebGL stage mounts once the card is within a screen of the viewport (or a few
+  // seconds after load, whichever comes first) and then stays — keeps first paint light
   const card = useRef<HTMLDivElement>(null);
   const near = useInView(card, { margin: "600px 0px", once: true });
+  const [late, setLate] = useState(false);
+  useEffect(() => {
+    const t = window.setTimeout(() => setLate(true), 3000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   const pick = (id: ServiceIcon) => {
     setSel((s) => (s.cur === id ? s : { cur: id, prev: s.cur }));
@@ -42,7 +48,7 @@ export function ServicesStage() {
         <div className="order-first lg:order-last lg:sticky lg:top-24 lg:self-start">
           <div ref={card} className="crystal relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-white/10 bg-ink-2/60 sm:aspect-[5/4] sm:rounded-[2rem]">
             <div className="absolute inset-[15%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.22),transparent_70%)]" aria-hidden />
-            {near && <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} />}
+            {(near || late) && <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} />}
             {/* caption */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-6">
               <div>
