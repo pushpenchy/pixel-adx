@@ -7,6 +7,7 @@ import { Activity, TrendingUp, Zap } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Section";
 import { brand } from "@/content/site";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 const HeroScene = dynamic(() => import("@/components/three/HeroScene"), { ssr: false });
 const HeroVisual = dynamic(() => import("./HeroVisual").then((m) => m.HeroVisual), { ssr: false });
@@ -36,6 +37,7 @@ const cards = [
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const { theme } = useTheme();
   const webgl = useSyncExternalStore(noop, hasWebGL, () => false);
   const ref = useRef<HTMLElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -64,7 +66,7 @@ export function Hero() {
       >
         <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,var(--blob-a)),transparent_70%)]" />
         {webgl ? (
-          <HeroScene active={sceneInView} reduce={!!reduce} />
+          <HeroScene active={sceneInView} reduce={!!reduce} light={theme === "light"} />
         ) : (
           <div className="absolute inset-0 grid place-items-center p-6">
             <HeroVisual />
