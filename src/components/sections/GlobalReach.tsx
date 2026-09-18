@@ -19,8 +19,10 @@ export function GlobalReach() {
   return (
     <Section id="global" className="overflow-hidden">
       <SectionHeading
+        index="11"
         eyebrow="Global Reach"
-        title="Built in Bangladesh. Designed for the World."
+        title="Built in Bangladesh."
+        accent="Designed for the world."
         subtitle="Headquartered in Bangladesh, Pixel ADX works with businesses across regions — delivering campaigns and technology digitally, wherever growth happens."
         align="center"
       />

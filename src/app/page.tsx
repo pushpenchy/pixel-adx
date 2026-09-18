@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
 import { Services } from "@/components/sections/Services";
 import { TrafficSources } from "@/components/sections/TrafficSources";
+import { TextTicker } from "@/components/ui/TextTicker";
 
 // Below-the-fold sections are code-split so the hero paints fast.
 const AdTech = dynamic(() => import("@/components/sections/AdTech").then((m) => m.AdTech));
@@ -26,12 +27,14 @@ export default function Home() {
         <Hero />
         <Stats />
         <TrafficSources />
+        <TextTicker items={["AdTech", "Media Buying", "Performance", "Software", "Data", "Growth"]} />
         <Services />
         <AdTech />
         <MediaBuying />
         <Technology />
         <Industries />
         <WhyPixelADX />
+        <TextTicker items={["We Build Technology", "We Buy Attention", "We Drive Growth"]} reverse />
         <CaseStudies />
         <Process />
         <Testimonials />

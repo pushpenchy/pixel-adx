@@ -40,8 +40,10 @@ export function Industries() {
   return (
     <Section id="industries">
       <SectionHeading
+        index="07"
         eyebrow="Industries"
-        title="Growth Systems for Every Sector"
+        title="Growth systems for"
+        accent="every sector."
         subtitle="Different industries, one approach: technology, media and data working together."
         align="center"
       />

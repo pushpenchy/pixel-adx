@@ -27,8 +27,10 @@ export function AdTech() {
   return (
     <Section id="adtech" className="overflow-hidden">
       <SectionHeading
+        index="03"
         eyebrow="AdTech"
-        title="Where Advertising Meets Technology"
+        title="Where advertising meets"
+        accent="technology."
         subtitle="Pixel ADX sits at the centre of the advertising stack — connecting advertisers, publishers and audiences through campaigns, traffic, data and analytics."
       />
 

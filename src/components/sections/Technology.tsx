@@ -26,8 +26,10 @@ export function Technology() {
   return (
     <Section id="technology">
       <SectionHeading
+        index="06"
         eyebrow="Software & Solutions"
-        title="Technology Built Around Your Business"
+        title="Technology built around"
+        accent="your business."
         subtitle="Custom software, web platforms, mobile apps, APIs, cloud infrastructure, automation and analytics — engineered as one system that grows with you."
       />
 

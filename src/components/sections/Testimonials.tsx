@@ -33,7 +33,7 @@ export function Testimonials() {
 
   return (
     <Section id="testimonials">
-      <SectionHeading eyebrow="Testimonials" title="What Partners Say" align="center" />
+      <SectionHeading index="10" eyebrow="Testimonials" title="What partners" accent="say." align="center" />
 
       <Reveal className="mx-auto mt-14 max-w-4xl" delay={0.1}>
         <div

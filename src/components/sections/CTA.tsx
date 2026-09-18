@@ -34,7 +34,7 @@ export function CTA() {
           <h2 className="mx-auto max-w-4xl font-display text-4xl font-extrabold leading-[1.02] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
             <TextReveal text="Have a Big Idea?" />
             <br />
-            <TextReveal text="Let's Build It." gradient delay={0.25} />
+            <span className="serif-accent text-[1.1em]"><TextReveal text="Let's build it." gradient delay={0.25} /></span>
           </h2>
           <Reveal delay={0.3}>
             <p className="mx-auto mt-6 max-w-xl text-base text-mute sm:text-lg">

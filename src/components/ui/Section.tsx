@@ -21,22 +21,28 @@ export function Section({
   );
 }
 
-export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * Editorial section label: "( 02 ) — SERVICES" in mono.
+ * Replaces the pill chip — quieter, more typographic.
+ */
+export function Eyebrow({ children, index, className }: { children: ReactNode; index?: string; className?: string }) {
   return (
-    <span
-      className={cn(
-        "glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-mute",
-        className
-      )}
-    >
-      <span className="size-1.5 rounded-full bg-accent shadow-[0_0_10px_2px_rgba(77,124,254,0.6)]" />
+    <span className={cn("label-mono inline-flex items-center gap-3", className)}>
+      {index && <span className="text-white/70">( {index} )</span>}
+      <span className="h-px w-8 bg-white/25" aria-hidden />
       {children}
     </span>
   );
 }
 
+/**
+ * Asymmetric heading: huge display title on the left, the supporting copy
+ * sits in a narrower right column, bottom-aligned. `accent` renders in
+ * italic serif — the editorial contrast that keeps it from feeling generic.
+ */
 export function SectionHeading({
   eyebrow,
+  index,
   title,
   accent,
   subtitle,
@@ -45,38 +51,64 @@ export function SectionHeading({
   titleClassName,
 }: {
   eyebrow?: string;
+  index?: string;
   title: string;
-  /** Optional trailing words rendered in the brand gradient */
   accent?: string;
   subtitle?: string;
   align?: "left" | "center";
   className?: string;
   titleClassName?: string;
 }) {
-  return (
-    <div className={cn("max-w-3xl", align === "center" && "mx-auto text-center", className)}>
-      {eyebrow && (
-        <Reveal>
-          <Eyebrow>{eyebrow}</Eyebrow>
-        </Reveal>
+  const heading = (
+    <h2
+      className={cn(
+        "font-display text-[2.6rem] font-extrabold leading-[0.98] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl",
+        titleClassName
       )}
-      <h2
-        className={cn(
-          "mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em] leading-[1.02] text-white",
-          titleClassName
+    >
+      <TextReveal text={title} />
+      {accent && (
+        <>
+          {" "}
+          <span className="serif-accent text-[1.12em] text-gradient">
+            <TextReveal text={accent} delay={0.18} gradient />
+          </span>
+        </>
+      )}
+    </h2>
+  );
+
+  if (align === "center") {
+    return (
+      <div className={cn("mx-auto max-w-3xl text-center", className)}>
+        {eyebrow && (
+          <Reveal>
+            <Eyebrow index={index}>{eyebrow}</Eyebrow>
+          </Reveal>
         )}
-      >
-        <TextReveal text={title} />
-        {accent && (
-          <>
-            {" "}
-            <TextReveal text={accent} gradient delay={0.2} />
-          </>
+        <div className="mt-6">{heading}</div>
+        {subtitle && (
+          <Reveal delay={0.15}>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-mute sm:text-lg">{subtitle}</p>
+          </Reveal>
         )}
-      </h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("grid gap-6 lg:grid-cols-12 lg:items-end", className)}>
+      <div className="lg:col-span-8">
+        {eyebrow && (
+          <Reveal>
+            <Eyebrow index={index}>{eyebrow}</Eyebrow>
+          </Reveal>
+        )}
+        <div className="mt-6">{heading}</div>
+      </div>
       {subtitle && (
-        <Reveal delay={0.15}>
-          <p className="mt-6 text-base sm:text-lg text-mute leading-relaxed">{subtitle}</p>
+        <Reveal delay={0.15} className="lg:col-span-4">
+          <p className="max-w-sm text-base leading-relaxed text-mute lg:pb-2">{subtitle}</p>
         </Reveal>
       )}
     </div>

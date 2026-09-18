@@ -25,8 +25,10 @@ export function Process() {
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <SectionHeading
+            index="09"
             eyebrow="Process"
-            title="From Idea to Scale"
+            title="From idea"
+            accent="to scale."
             subtitle="A single, connected process across technology, media and growth — so nothing gets lost between strategy and execution."
           />
           {/* active stage readout */}

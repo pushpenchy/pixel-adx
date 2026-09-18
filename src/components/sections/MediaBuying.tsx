@@ -57,8 +57,10 @@ export function MediaBuying() {
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div>
           <SectionHeading
+            index="04"
             eyebrow="Media Buying"
-            title="Buy Smarter. Scale Faster."
+            title="Buy smarter."
+            accent="Scale faster."
             subtitle="Pixel ADX combines media strategy, creative testing, audience targeting, campaign optimization and performance analytics — so budgets move toward what actually converts."
           />
           <ul className="mt-10 grid gap-3 sm:grid-cols-2">

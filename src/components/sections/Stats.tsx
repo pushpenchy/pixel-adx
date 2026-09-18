@@ -4,29 +4,24 @@ import { motion } from "framer-motion";
 import { Stagger, staggerItem } from "@/components/ui/Reveal";
 import { stats } from "@/content/site";
 
-/** Qualitative trust strip. Values are editable in src/content/site.ts */
+/** Qualitative trust strip — big numerals on hairlines, no boxes. Editable in src/content/site.ts */
 export function Stats() {
   return (
-    <section aria-label="Pixel ADX at a glance" className="relative py-6 lg:py-10">
+    <section aria-label="Pixel ADX at a glance" className="relative py-10 lg:py-16">
       <div className="container-x">
-        <Stagger className="crystal relative grid grid-cols-2 overflow-hidden rounded-xl3 border border-white/10 bg-white/[0.025] lg:grid-cols-4">
-          <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(120,170,255,0.6),transparent)]" />
+        <Stagger className="hairline grid grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
               variants={staggerItem}
-              className={[
-                "group relative px-4 py-6 sm:px-8 sm:py-8 lg:py-10",
-                i % 2 === 1 ? "border-l border-white/10" : "",
-                i >= 2 ? "border-t border-white/10 lg:border-t-0" : "",
-                i >= 1 ? "lg:border-l" : "",
-              ].join(" ")}
+              className="group relative border-b border-white/10 px-1 pb-8 pt-7 sm:pb-10 lg:border-b-0 lg:px-6 lg:first:pl-0"
             >
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(400px_circle_at_50%_120%,rgba(77,124,254,0.14),transparent)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              <p className="font-display text-[17px] font-extrabold tracking-[-0.03em] text-white sm:text-3xl lg:text-[2.1rem]">
+              <span className="label-mono text-white/40">0{i + 1}</span>
+              <p className="mt-4 font-display text-3xl font-extrabold tracking-[-0.04em] text-white sm:text-4xl lg:text-[2.75rem] lg:leading-none">
                 {s.value}
               </p>
-              <p className="mt-1.5 text-sm text-mute">{s.label}</p>
+              <p className="mt-2 text-sm text-mute">{s.label}</p>
+              <span aria-hidden className="absolute bottom-0 left-0 h-px w-0 bg-[linear-gradient(90deg,#38e1ff,#8b5cf6)] transition-all duration-500 group-hover:w-full lg:-bottom-px" />
             </motion.div>
           ))}
         </Stagger>
