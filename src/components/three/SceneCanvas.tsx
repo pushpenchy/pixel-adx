@@ -67,10 +67,10 @@ function CameraRig({ base, look }: { base: [number, number, number]; look: [numb
 
 /** Scales the scene so it always fits the canvas, offset right so headline copy can overlap the left edge. */
 function Fit({ children, size = 1, offset = 0.06 }: { children: React.ReactNode; size?: number; offset?: number }) {
-  const { viewport } = useThree();
-  // narrow canvases (phones) get a smaller, centred composition
-  const narrow = viewport.width < 8;
-  const s = Math.min(0.72 * size, (viewport.width / 11.5) * size, (viewport.height / 10.5) * size) * (narrow ? 0.82 : 1);
+  const { viewport, size: px } = useThree();
+  // phones (narrow in pixels) get a smaller, centred composition
+  const narrow = px.width < 640;
+  const s = Math.min(0.72 * size, (viewport.width / 10.2) * size, (viewport.height / 10.5) * size) * (narrow ? 0.82 : 1);
   return (
     <group scale={s} position={[narrow ? 0 : viewport.width * offset, 0.35, 0]}>
       {children}
@@ -147,8 +147,8 @@ export function SceneCanvas({
 
       <ambientLight intensity={light ? 0.8 : 0.35} />
       <directionalLight position={[4, 6, 6]} intensity={1.6} />
-      <pointLight position={[-6, 3, 4]} intensity={60} color="#38e1ff" />
-      <pointLight position={[6, -3, 3]} intensity={60} color="#8b5cf6" />
+      <pointLight position={[-6, 3, 4]} intensity={35} color="#38e1ff" />
+      <pointLight position={[6, -3, 3]} intensity={35} color="#8b5cf6" />
 
       <Environment resolution={256} frames={1}>
         <Lightformer intensity={3} position={[0, 6, -8]} scale={[12, 6, 1]} color="#dfe8ff" />
@@ -159,7 +159,7 @@ export function SceneCanvas({
 
       <Fit size={size} offset={offset}>
         {children}
-        {sparkles && <Sparkles count={80} scale={[12, 7, 7]} size={2.6} speed={reduce ? 0 : 0.35} opacity={0.6} color="#bfd4ff" />}
+        {sparkles && <Sparkles count={70} scale={[12, 7, 7]} size={2.2} speed={reduce ? 0 : 0.35} opacity={0.4} color="#bfd4ff" />}
       </Fit>
 
       {grid && (
@@ -168,10 +168,10 @@ export function SceneCanvas({
           args={[60, 60]}
           cellSize={0.6}
           cellThickness={0.7}
-          cellColor={light ? "#aab6d3" : "#2a3452"}
+          cellColor={light ? "#aab6d3" : "#1c2440"}
           sectionSize={3}
-          sectionThickness={1.3}
-          sectionColor={light ? "#6d8fff" : "#4d7cfe"}
+          sectionThickness={1.1}
+          sectionColor={light ? "#6d8fff" : "#2f4aa8"}
           fadeDistance={34}
           fadeStrength={1.6}
           infiniteGrid
@@ -183,7 +183,7 @@ export function SceneCanvas({
 
       {bloom && (
         <EffectComposer multisampling={0} enableNormalPass={false}>
-          <Bloom mipmapBlur intensity={(light ? 0.5 : 1.0) * bloomIntensity} luminanceThreshold={0.7} luminanceSmoothing={0.3} radius={0.75} levels={6} />
+          <Bloom mipmapBlur intensity={(light ? 0.5 : 1.0) * bloomIntensity} luminanceThreshold={0.82} luminanceSmoothing={0.25} radius={0.7} levels={6} />
         </EffectComposer>
       )}
     </Canvas>

@@ -22,10 +22,19 @@ const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 const HUB = new THREE.Vector3(0, -0.25, 1.9);
 
 const panels: { spec: PanelSpec; position: [number, number, number]; rotation: [number, number, number]; width: number; delay: number }[] = [
-  { spec: { title: "Conversions · 14d", value: "1,362", sub: "▲ 18.4% vs last period", kind: "line", accent: "#38e1ff", seed: 5 }, position: [0.2, 1.05, 0.4], rotation: [0, 0, 0], width: 2.9, delay: 1.1 },
-  { spec: { title: "Spend by channel", value: "$12,480", sub: "Budget pacing on track", kind: "bars", accent: "#4d7cfe", seed: 9 }, position: [-2.75, 0.2, -0.9], rotation: [0, 0.55, 0], width: 2.3, delay: 1.35 },
-  { spec: { title: "Traffic mix", value: "2.41M", sub: "Impressions", kind: "donut", accent: "#8b5cf6", seed: 2 }, position: [2.85, 0.15, -0.9], rotation: [0, -0.55, 0], width: 2.3, delay: 1.6 },
-  { spec: { title: "Performance", value: "4.2×", sub: "ROAS · demo data", kind: "kpis", accent: "#38e1ff", seed: 7 }, position: [0.1, -1.55, 0.2], rotation: [0.12, 0, 0], width: 2.6, delay: 1.85 },
+  // centre column
+  { spec: { title: "Conversions · 14d", value: "1,362", sub: "▲ 18.4% vs last period", kind: "line", accent: "#38e1ff", seed: 5 }, position: [0.2, 1.55, 0.2], rotation: [0, 0, 0], width: 2.8, delay: 1.1 },
+  { spec: { title: "Performance", value: "4.2×", sub: "ROAS · demo data", kind: "kpis", accent: "#38e1ff", seed: 7 }, position: [0.1, -0.85, 0.55], rotation: [0.1, 0, 0], width: 2.3, delay: 1.85 },
+  // left wing
+  { spec: { title: "Spend by channel", value: "$12,480", sub: "Budget pacing on track", kind: "bars", accent: "#4d7cfe", seed: 9 }, position: [-2.95, 1.0, -0.7], rotation: [0, 0.5, 0], width: 2.2, delay: 1.35 },
+  { spec: { title: "Live campaign feed", value: "", sub: "Real-time · all channels", kind: "feed", accent: "#34d399", seed: 1 }, position: [-3.15, -1.35, 0.1], rotation: [0, 0.55, 0], width: 2.1, delay: 2.1 },
+  { spec: { title: "Conversion funnel", value: "0.056%", sub: "Impression → sale", kind: "funnel", accent: "#8b5cf6", seed: 3 }, position: [-3.45, 2.75, -1.5], rotation: [0.05, 0.6, 0], width: 1.9, delay: 2.35 },
+  // right wing
+  { spec: { title: "Traffic mix", value: "2.41M", sub: "Impressions", kind: "donut", accent: "#8b5cf6", seed: 2 }, position: [2.95, 1.0, -0.7], rotation: [0, -0.5, 0], width: 2.2, delay: 1.6 },
+  { spec: { title: "Audience reach", value: "5 regions", sub: "Live audiences by market", kind: "map", accent: "#8b5cf6", seed: 6 }, position: [3.15, -1.3, 0.1], rotation: [0, -0.55, 0], width: 2.3, delay: 2.2 },
+  { spec: { title: "Creative test", value: "+24%", sub: "Variant B lifts CTR", kind: "ab", accent: "#38e1ff", seed: 8 }, position: [3.45, 2.75, -1.5], rotation: [0.05, -0.6, 0], width: 1.9, delay: 2.5 },
+  // channels strip in front of the dial
+  { spec: { title: "Active channels", value: "10 platforms · buying live", sub: "All systems nominal", kind: "channels", accent: "#34d399", seed: 4 }, position: [0, -2.15, 2.4], rotation: [-0.35, 0, 0], width: 3.4, delay: 2.7 },
 ];
 
 const cells: [number, number][] = [
@@ -72,10 +81,10 @@ function MiniMark({ reduce }: { reduce: boolean }) {
       ))}
       <Pixel i={4} reduce={reduce}>
         <RoundedBox args={[1, 1, 1]} radius={0.18}>
-          <meshBasicMaterial color="#ffffff" toneMapped={false} />
+          <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.9} roughness={0.4} />
         </RoundedBox>
       </Pixel>
-      <pointLight intensity={4} distance={4} color="#cfe0ff" />
+      <pointLight intensity={1.5} distance={4} color="#cfe0ff" />
     </group>
   );
 }
@@ -103,8 +112,8 @@ function HudDial({ reduce }: { reduce: boolean }) {
       b.current.rotation.z -= spin * 1.6;
       b.current.scale.setScalar((0.6 + 0.4 * p) * 0.62);
     }
-    if (matA.current) matA.current.opacity = 0.85 * p;
-    if (matB.current) matB.current.opacity = 0.5 * p;
+    if (matA.current) matA.current.opacity = 0.6 * p;
+    if (matB.current) matB.current.opacity = 0.35 * p;
   });
   return (
     <group position={[0, -2.4, 1.2]} rotation={[-Math.PI / 2 + 0.25, 0, 0]}>
@@ -173,7 +182,7 @@ export default function DeckScene({ reduce }: SceneProps) {
         <MiniMark reduce={reduce} />
       </Float>
       <HudDial reduce={reduce} />
-      <pointLight position={[0, 0, 3]} intensity={12} distance={9} color="#9cc2ff" />
+      <pointLight position={[0, 0, 3]} intensity={5} distance={9} color="#9cc2ff" />
     </group>
   );
 }

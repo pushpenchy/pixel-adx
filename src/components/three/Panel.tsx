@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { makePanelTexture, makeScanTexture, type PanelSpec } from "./textures";
+import { makeFeedLinesTexture, makePanelTexture, makeScanTexture, PANEL_SIZE, type PanelSpec } from "./textures";
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 
@@ -39,8 +39,12 @@ export function Panel({
     },
     [tex, scan]
   );
-  const aspect = spec.kind === "kpis" ? 520 / 1024 : 640 / 1024;
-  const h = width * aspect;
+  const [pw, ph] = PANEL_SIZE[spec.kind];
+  const h = width * (ph / pw);
+  const feed = spec.kind === "feed";
+  const feedTex = useMemo(() => (feed ? makeFeedLinesTexture() : null), [feed]);
+  useEffect(() => () => feedTex?.dispose(), [feedTex]);
+  const feedMat = useRef<THREE.MeshBasicMaterial>(null);
   const group = useRef<THREE.Group>(null);
   const face = useRef<THREE.MeshBasicMaterial>(null);
   const edgeMat = useRef<THREE.LineBasicMaterial>(null);
@@ -63,13 +67,21 @@ export function Panel({
     g.visible = t > 0 || reduce;
     if (face.current) face.current.opacity = flicker * p;
     if (back.current) back.current.opacity = 0.55 * p;
-    if (edgeMat.current) edgeMat.current.opacity = 0.35 + 0.45 * flicker;
+    if (edgeMat.current) edgeMat.current.opacity = 0.18 + 0.22 * flicker;
 
     // ── scan sweep
     const sm = scanMat.current;
     if (sm) {
       if (sm.map) sm.map.offset.y = (-(now * 0.22 + phase * 0.1)) % 1;
-      sm.opacity = 0.35 * p;
+      sm.opacity = 0.2 * p;
+    }
+
+    // ── live feed: scroll the tileable event list upward
+    const fm = feedMat.current;
+    if (fm && fm.map) {
+      fm.map.repeat.set(1, 0.56);
+      fm.map.offset.y = (now * 0.06) % 1;
+      fm.opacity = 0.95 * p;
     }
 
     // ── idle float + cursor tilt
@@ -92,14 +104,20 @@ export function Panel({
         <planeGeometry args={[width, h]} />
         <meshBasicMaterial ref={face} map={tex} transparent toneMapped={false} />
       </mesh>
+      {feed && feedTex && (
+        <mesh position={[0, -h * 0.13, 0.005]}>
+          <planeGeometry args={[width * 0.9, h * 0.56]} />
+          <meshBasicMaterial ref={feedMat} map={feedTex} transparent toneMapped={false} depthWrite={false} />
+        </mesh>
+      )}
       {/* holographic scan sweep */}
       <mesh position={[0, 0, 0.01]}>
         <planeGeometry args={[width, h]} />
-        <meshBasicMaterial ref={scanMat} map={scan} transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
+        <meshBasicMaterial ref={scanMat} map={scan} transparent opacity={0.2} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
       </mesh>
       {/* glowing edge */}
       <lineSegments geometry={edges}>
-        <lineBasicMaterial ref={edgeMat} color="#9cc2ff" transparent opacity={0.6} blending={THREE.AdditiveBlending} toneMapped={false} />
+        <lineBasicMaterial ref={edgeMat} color="#9cc2ff" transparent opacity={0.4} blending={THREE.AdditiveBlending} toneMapped={false} />
       </lineSegments>
     </group>
   );

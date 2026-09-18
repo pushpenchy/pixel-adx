@@ -1,4 +1,7 @@
 import * as THREE from "three";
+import { logos, type Logo, type LogoKey } from "@/content/logos";
+import { landLonLat } from "@/lib/worldmap";
+import { reachPoints } from "@/content/site";
 
 /**
  * Runtime-generated "asset" textures for the 3D scenes: holographic
@@ -44,13 +47,40 @@ function seeded(seed: number) {
   };
 }
 
-export type PanelKind = "line" | "bars" | "donut" | "kpis";
+export type PanelKind = "line" | "bars" | "donut" | "kpis" | "feed" | "channels" | "map" | "funnel" | "ab";
 export type PanelSpec = { title: string; value: string; sub: string; kind: PanelKind; accent?: string; seed?: number };
+
+/** Canvas size per kind — the Panel plane keeps this aspect. */
+export const PANEL_SIZE: Record<PanelKind, [number, number]> = {
+  line: [1024, 640],
+  bars: [1024, 640],
+  donut: [1024, 640],
+  kpis: [1024, 520],
+  feed: [1024, 900],
+  channels: [1024, 300],
+  map: [1024, 640],
+  funnel: [1024, 640],
+  ab: [1024, 640],
+};
+
+const CHANNELS: LogoKey[] = ["meta", "googleads", "tiktok", "youtube", "snapchat", "x", "linkedin", "pinterest", "reddit", "microsoft"];
+
+function drawLogo(ctx: CanvasRenderingContext2D, key: LogoKey, x: number, y: number, size: number) {
+  const l: Logo = logos[key];
+  const dark = parseInt(l.hex, 16) < 0x222222;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 24, size / 24);
+  l.paths.forEach((p) => {
+    ctx.fillStyle = p.fill ?? (dark ? "#ffffff" : "#" + l.hex);
+    ctx.fill(new Path2D(p.d));
+  });
+  ctx.restore();
+}
 
 /** A glassy dashboard card: title, big metric, delta, and a mini chart. */
 export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", seed = 3 }: PanelSpec) {
-  const W = 1024;
-  const H = kind === "kpis" ? 520 : 640;
+  const [W, H] = PANEL_SIZE[kind];
   const { c, ctx } = canvas(W, H);
   const rand = seeded(seed);
 
@@ -63,9 +93,9 @@ export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", 
   ctx.fill();
   // rim
   const rim = ctx.createLinearGradient(0, 0, W, H);
-  rim.addColorStop(0, "rgba(255,255,255,0.7)");
-  rim.addColorStop(0.35, "rgba(150,180,255,0.15)");
-  rim.addColorStop(1, "rgba(139,92,246,0.6)");
+  rim.addColorStop(0, "rgba(255,255,255,0.42)");
+  rim.addColorStop(0.35, "rgba(150,180,255,0.12)");
+  rim.addColorStop(1, "rgba(139,92,246,0.38)");
   ctx.lineWidth = 3;
   ctx.strokeStyle = rim;
   ctx.stroke();
@@ -90,6 +120,33 @@ export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", 
   ctx.shadowBlur = 18;
   ctx.fill();
   ctx.shadowBlur = 0;
+
+  if (kind === "channels") {
+    // one row of platform marks with status dots
+    ctx.fillStyle = accent;
+    ctx.font = `600 26px ${FONT}`;
+    ctx.fillText(sub, W - 52 - ctx.measureText(sub).width, 78);
+    const n = CHANNELS.length;
+    const slot = (W - 104) / n;
+    CHANNELS.forEach((k, i) => {
+      const cx = 52 + slot * i + slot / 2;
+      roundRect(ctx, cx - 44, 118, 88, 88, 22);
+      ctx.fillStyle = "rgba(255,255,255,0.06)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.12)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      drawLogo(ctx, k, cx - 24, 118 + 20, 48);
+      ctx.fillStyle = i % 4 === 3 ? "#fbbf24" : "#34d399";
+      ctx.beginPath();
+      ctx.arc(cx + 34, 128, 6, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.fillStyle = "rgba(190,205,240,0.6)";
+    ctx.font = `500 22px ${MONO}`;
+    ctx.fillText(value, 52, 262);
+    return toTexture(c);
+  }
 
   // value
   ctx.fillStyle = "#ffffff";
@@ -202,6 +259,113 @@ export function makePanelTexture({ title, value, sub, kind, accent = "#38e1ff", 
       ctx.fillStyle = "rgba(255,255,255,0.45)";
       ctx.font = `500 24px ${MONO}`;
       ctx.fillText(`${Math.round(s.v * 100)}%`, x0 + 200, y);
+    });
+  } else if (kind === "feed") {
+    // static frame only — the scrolling lines are a separate tileable texture (makeFeedLinesTexture)
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x0, chartTop - 10);
+    ctx.lineTo(x1, chartTop - 10);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(190,205,240,0.5)";
+    ctx.font = `500 22px ${MONO}`;
+    ctx.fillText("TIME      EVENT                          Δ", x0, chartTop + 22);
+  } else if (kind === "map") {
+    // equirectangular dot map with glowing audience hotspots
+    const mx = x0;
+    const my = chartTop - 20;
+    const mw = x1 - x0;
+    const mh = chartH + 30;
+    const proj = (lon: number, lat: number) => [mx + ((lon + 180) / 360) * mw, my + ((84 - lat) / 142) * mh] as const;
+    ctx.fillStyle = "rgba(190,205,255,0.35)";
+    landLonLat(4).forEach((p) => {
+      const [px, py] = proj(p.lon, p.lat);
+      ctx.beginPath();
+      ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    reachPoints.forEach((p) => {
+      const [px, py] = proj(p.lon, p.lat);
+      const col = p.home ? "#38e1ff" : accent;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, p.home ? 70 : 46);
+      g.addColorStop(0, col + "99");
+      g.addColorStop(1, col + "00");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(px, py, p.home ? 70 : 46, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  } else if (kind === "funnel") {
+    const steps = [
+      ["Impressions", "2.41M", 1],
+      ["Clicks", "48.9K", 0.72],
+      ["Leads", "6.1K", 0.48],
+      ["Sales", "1,362", 0.3],
+    ] as const;
+    const rowH = chartH / steps.length;
+    steps.forEach(([label, val, w], i) => {
+      const y = chartTop + i * rowH;
+      const bw = (x1 - x0) * w;
+      const bx = x0 + ((x1 - x0) - bw) / 2;
+      const g = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+      g.addColorStop(0, "#38e1ff");
+      g.addColorStop(1, "#8b5cf6");
+      ctx.fillStyle = g;
+      ctx.globalAlpha = 0.85 - i * 0.12;
+      roundRect(ctx, bx, y + 8, bw, rowH - 16, 14);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `700 26px ${FONT}`;
+      ctx.textAlign = "center";
+      ctx.fillText(`${label}  ·  ${val}`, x0 + (x1 - x0) / 2, y + rowH / 2 + 9);
+      ctx.textAlign = "left";
+    });
+  } else if (kind === "ab") {
+    const cw = (x1 - x0 - 30) / 2;
+    [
+      ["Variant A", "2.9% CTR", false, ["#1f2a5a", "#3b4b9a"]],
+      ["Variant B", "3.6% CTR", true, ["#0d3a4a", "#38e1ff"]],
+    ].forEach(([name, ctr, win, grad], i) => {
+      const x = x0 + i * (cw + 30);
+      const g = ctx.createLinearGradient(x, chartTop, x + cw, chartTop + chartH);
+      g.addColorStop(0, (grad as string[])[0]);
+      g.addColorStop(1, (grad as string[])[1]);
+      ctx.fillStyle = g;
+      roundRect(ctx, x, chartTop, cw, chartH - 70, 20);
+      ctx.fill();
+      // abstract creative: circles + bar
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      ctx.beginPath();
+      ctx.arc(x + cw * 0.3, chartTop + 70, 34, 0, Math.PI * 2);
+      ctx.fill();
+      roundRect(ctx, x + 24, chartTop + chartH - 150, cw - 48, 22, 8);
+      ctx.fill();
+      roundRect(ctx, x + 24, chartTop + chartH - 118, cw * 0.55, 22, 8);
+      ctx.fill();
+      if (win) {
+        ctx.strokeStyle = "#38e1ff";
+        ctx.lineWidth = 4;
+        roundRect(ctx, x, chartTop, cw, chartH - 70, 20);
+        ctx.stroke();
+        roundRect(ctx, x + cw - 150, chartTop + 16, 134, 40, 20);
+        ctx.fillStyle = "#38e1ff";
+        ctx.fill();
+        ctx.fillStyle = "#0a0b10";
+        ctx.font = `800 22px ${FONT}`;
+        ctx.fillText("WINNER", x + cw - 130, chartTop + 44);
+      }
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `700 28px ${FONT}`;
+      ctx.fillText(name as string, x + 4, chartTop + chartH - 26);
+      ctx.fillStyle = win ? "#38e1ff" : "rgba(200,212,245,0.7)";
+      ctx.font = `600 26px ${MONO}`;
+      ctx.fillText(ctr as string, x + cw - ctx.measureText(ctr as string).width - 4, chartTop + chartH - 26);
     });
   } else {
     // kpis: three mini tiles
@@ -362,4 +526,43 @@ export function makeScanTexture() {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(1, 1);
   return t;
+}
+
+/** Tileable list of campaign events for the live feed (scrolled via texture offset). */
+export function makeFeedLinesTexture() {
+  const W = 1024;
+  const rows = [
+    ["12:04:11", "Conversion · Meta · Lookalike 2%", "+$48.20", "#34d399"],
+    ["12:04:07", "Bid +12% · Search — Brand", "CPA ↓", "#38e1ff"],
+    ["12:03:52", "Creative B winning · CTR +0.6%", "auto", "#c4b5fd"],
+    ["12:03:40", "Budget → TikTok Prospecting", "+$300", "#38e1ff"],
+    ["12:03:21", "Conversion · Google · Retargeting", "+$112.00", "#34d399"],
+    ["12:03:05", "Frequency cap reached · Video", "paused", "#fbbf24"],
+    ["12:02:48", "New audience synced · 18.2K", "CRM", "#38e1ff"],
+    ["12:02:30", "Conversion · Snapchat · Story", "+$26.50", "#34d399"],
+    ["12:02:12", "Landing page LCP 1.9s", "ok", "#34d399"],
+    ["12:01:58", "Bid −8% · Reddit · Awareness", "ROAS", "#38e1ff"],
+    ["12:01:41", "Conversion · Meta · Prospecting", "+$64.00", "#34d399"],
+    ["12:01:20", "Attribution model refreshed", "sys", "#c4b5fd"],
+  ];
+  const LH = 46;
+  const H = rows.length * LH;
+  const { c, ctx } = canvas(W, H);
+  ctx.clearRect(0, 0, W, H);
+  rows.forEach(([t, ev, d, col], i) => {
+    const y = i * LH + 30;
+    ctx.fillStyle = "rgba(190,205,240,0.55)";
+    ctx.font = `500 22px ${MONO}`;
+    ctx.fillText(t, 0, y);
+    ctx.fillStyle = "rgba(235,240,255,0.9)";
+    ctx.font = `500 23px ${FONT}`;
+    ctx.fillText(ev, 130, y);
+    ctx.fillStyle = col;
+    ctx.font = `600 22px ${MONO}`;
+    ctx.fillText(d, W - 120 - ctx.measureText(d).width + 100, y);
+  });
+  const tex = toTexture(c);
+  tex.wrapS = THREE.ClampToEdgeWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  return tex;
 }
