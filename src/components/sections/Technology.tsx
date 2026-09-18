@@ -26,7 +26,7 @@ export function Technology() {
   return (
     <Section id="technology">
       <SectionHeading
-        index="06"
+        index="05"
         eyebrow="Software & Solutions"
         title="Technology built around"
         accent="your business."

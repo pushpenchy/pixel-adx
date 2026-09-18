@@ -56,11 +56,11 @@ export function Particles({ count = 420, spread = 5 }: { count?: number; spread?
   );
 }
 
-function CameraRig({ base, look }: { base: [number, number, number]; look: [number, number, number] }) {
+function CameraRig({ base, look, parallax }: { base: [number, number, number]; look: [number, number, number]; parallax: number }) {
   useFrame((state, dt) => {
     const cam = state.camera;
-    cam.position.x = THREE.MathUtils.damp(cam.position.x, base[0] + state.pointer.x * 1.1, 2.5, dt);
-    cam.position.y = THREE.MathUtils.damp(cam.position.y, base[1] + state.pointer.y * 0.6, 2.5, dt);
+    cam.position.x = THREE.MathUtils.damp(cam.position.x, base[0] + state.pointer.x * 1.1 * parallax, 2.5, dt);
+    cam.position.y = THREE.MathUtils.damp(cam.position.y, base[1] + state.pointer.y * 0.6 * parallax, 2.5, dt);
     cam.lookAt(look[0], look[1], look[2]);
   });
   return null;
@@ -94,6 +94,8 @@ export type SceneCanvasProps = {
   sparkles?: boolean;
   particles?: boolean;
   bloomIntensity?: number;
+  /** strength of the cursor camera drift (1 = hero, 0 = none) */
+  parallax?: number;
 };
 
 export function SceneCanvas({
@@ -109,6 +111,7 @@ export function SceneCanvas({
   sparkles = true,
   particles = true,
   bloomIntensity = 1,
+  parallax = 1,
 }: SceneCanvasProps) {
   // lite tier (phones / low-core): 1× render, no bloom, fewer particles
   const lite = useMemo(() => isLiteDevice(), []);
@@ -182,7 +185,7 @@ export function SceneCanvas({
       )}
 
       {particles && <Particles count={lite ? 180 : 420} />}
-      {!reduce && <CameraRig base={camera} look={look} />}
+      {!reduce && <CameraRig base={camera} look={look} parallax={parallax} />}
 
       {bloom && !lite && (
         <EffectComposer multisampling={0} enableNormalPass={false}>

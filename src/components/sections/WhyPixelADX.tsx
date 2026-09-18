@@ -27,7 +27,7 @@ export function WhyPixelADX() {
   return (
     <Section id="about">
       <SectionHeading
-        index="08"
+        index="07"
         eyebrow="Why Pixel ADX"
         title="Built for growth."
         accent="Engineered for scale."

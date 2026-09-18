@@ -8,7 +8,6 @@ import { TrafficSources } from "@/components/sections/TrafficSources";
 import { TextTicker } from "@/components/ui/TextTicker";
 
 // Below-the-fold sections are code-split so the hero paints fast.
-const ServicesStory = dynamic(() => import("@/components/sections/ServicesStory").then((m) => m.ServicesStory));
 const AdTech = dynamic(() => import("@/components/sections/AdTech").then((m) => m.AdTech));
 const MediaBuying = dynamic(() => import("@/components/sections/MediaBuying").then((m) => m.MediaBuying));
 const Technology = dynamic(() => import("@/components/sections/Technology").then((m) => m.Technology));
@@ -30,7 +29,6 @@ export default function Home() {
         <TrafficSources />
         <TextTicker items={["AdTech", "Media Buying", "Performance", "Software", "Data", "Growth"]} />
         <ServicesStage />
-        <ServicesStory />
         <AdTech />
         <MediaBuying />
         <Technology />

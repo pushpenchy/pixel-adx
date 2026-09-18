@@ -19,7 +19,7 @@ export function GlobalReach() {
   return (
     <Section id="global" className="overflow-hidden">
       <SectionHeading
-        index="12"
+        index="11"
         eyebrow="Global Reach"
         title="Built in Bangladesh."
         accent="Designed for the world."

@@ -57,7 +57,7 @@ export function Industries() {
   return (
     <Section id="industries">
       <SectionHeading
-        index="07"
+        index="06"
         eyebrow="Industries"
         title="Growth systems for"
         accent="every sector."
