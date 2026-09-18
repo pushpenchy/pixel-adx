@@ -9,63 +9,84 @@ import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { caseStudies, type Hue } from "@/content/site";
 
 const hueBg: Record<Hue, string> = {
-  blue: "from-[#4d7cfe]/40 via-[#1b2a5c] to-[#0a0b10]",
-  cyan: "from-[#38e1ff]/35 via-[#12384a] to-[#0a0b10]",
-  violet: "from-[#8b5cf6]/40 via-[#2a1b5c] to-[#0a0b10]",
+  blue: "from-[#4d7cfe]/30 via-[#141d3f] to-[#0a0b10]",
+  cyan: "from-[#38e1ff]/25 via-[#0f2a36] to-[#0a0b10]",
+  violet: "from-[#8b5cf6]/30 via-[#221744] to-[#0a0b10]",
+};
+const hueGlow: Record<Hue, string> = {
+  blue: "rgba(77,124,254,0.45)",
+  cyan: "rgba(56,225,255,0.35)",
+  violet: "rgba(139,92,246,0.45)",
 };
 
+/**
+ * Project card: a browser-frame mockup of the site (crisp 2× capture) on a
+ * tinted stage, copy on a solid panel below — nothing overlaps the artwork.
+ */
 function ProjectCard({ p, index }: { p: (typeof caseStudies)[number]; index: number }) {
+  const host = p.href ? p.href.replace(/^https?:\/\//, "").replace(/\/$/, "") : "coming-soon";
   return (
     <SpotlightCard as="article" className="h-full w-full rounded-xl3" lift={0}>
-      <a href={p.href ?? "#contact"} target={p.href ? "_blank" : undefined} rel={p.href ? "noopener noreferrer" : undefined} className="block h-full">
-        <div className="relative flex h-full flex-col overflow-hidden rounded-[inherit]">
-          {/* screenshot, or a placeholder until the client signs off */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${hueBg[p.hue]} transition-transform duration-[1200ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.06]`}>
-            {p.image ? (
-              <Image src={p.image} alt={`${p.name} website`} fill sizes="(min-width: 1024px) 760px, 100vw" className="object-cover object-top" />
-            ) : (
-              <>
-                <div className="absolute inset-0 bg-grid opacity-40 [--grid-size:40px]" />
-                <div className="absolute left-1/2 top-[30%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 text-white/30">
-                  <ImageIcon className="size-8" strokeWidth={1.4} />
-                  <span className="text-[11px] font-medium uppercase tracking-[0.2em]">Image / Video placeholder</span>
+      <a href={p.href ?? "#contact"} target={p.href ? "_blank" : undefined} rel={p.href ? "noopener noreferrer" : undefined} className="flex h-full flex-col overflow-hidden rounded-[inherit]">
+        {/* ── stage with browser mockup */}
+        <div className={`relative min-h-0 flex-1 overflow-hidden bg-gradient-to-br ${hueBg[p.hue]}`}>
+          <div aria-hidden className="absolute inset-0 bg-grid opacity-30 [--grid-size:36px] mask-radial" />
+          <div aria-hidden className="absolute left-1/2 top-[65%] h-[70%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-70 transition-opacity duration-700 group-hover:opacity-100" style={{ background: `radial-gradient(closest-side, ${hueGlow[p.hue]}, transparent)` }} />
+
+          <div className="absolute inset-x-7 top-6 bottom-0 flex flex-col rounded-t-2xl border border-white/12 bg-[#0b0d16] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9),inset_0_1px_0_0_rgba(255,255,255,0.08)] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-2 sm:inset-x-10 sm:top-9">
+            {/* chrome */}
+            <div className="flex h-9 shrink-0 items-center gap-3 border-b border-white/10 px-3.5">
+              <span className="flex gap-1.5">
+                <i className="size-2.5 rounded-full bg-[#ff5f57]" />
+                <i className="size-2.5 rounded-full bg-[#febc2e]" />
+                <i className="size-2.5 rounded-full bg-[#28c840]" />
+              </span>
+              <span className="flex h-6 flex-1 items-center justify-center rounded-md bg-white/[0.05] text-[11px] tracking-wide text-white/45">{host}</span>
+            </div>
+            {/* page */}
+            <div className="relative min-h-0 flex-1 overflow-hidden">
+              {p.image ? (
+                <Image
+                  src={p.image}
+                  alt={`${p.name} — website`}
+                  fill
+                  quality={90}
+                  sizes="(min-width: 1024px) 800px, 100vw"
+                  className="object-cover object-top transition-transform duration-[1400ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025]"
+                />
+              ) : (
+                <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.05),transparent_60%)]">
+                  <div className="absolute inset-0 bg-grid opacity-30 [--grid-size:28px]" />
+                  <div className="flex flex-col items-center gap-2 text-white/30">
+                    <ImageIcon className="size-7" strokeWidth={1.4} />
+                    <span className="text-[11px] font-medium uppercase tracking-[0.2em]">Image / video placeholder</span>
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
-          {/* overlay */}
-          <div className={p.image ? "absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--bg)/0.15)_0%,rgb(var(--bg)/0.35)_35%,rgb(var(--bg)/0.9)_70%,rgb(var(--bg)/0.97)_100%)]" : "absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--bg)/0)_20%,rgb(var(--bg)/0.55)_60%,rgb(var(--bg)/0.92)_100%)] transition-opacity duration-500 group-hover:opacity-100"} />
-          <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/25" />
-
-          {/* content */}
-          <div className="relative flex flex-1 flex-col justify-between p-6 sm:p-8">
-            <div className="flex items-center justify-between">
-              <span className="rounded-full border border-white/15 bg-ink/40 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80 backdrop-blur">
-                {p.category}
-              </span>
-              <span className="font-display text-sm font-bold text-white/40">{p.year ?? `0${index + 1}`}</span>
-            </div>
-
-            <div className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-2">
-              {p.client && <p className="label-mono mb-2 text-white/50">{p.client}</p>}
-              <h3 className="font-display text-2xl font-bold tracking-[-0.025em] text-white sm:text-3xl">{p.name}</h3>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-white/70">{p.description}</p>
-              <div className="mt-4 grid gap-1.5 text-[12px] sm:grid-cols-2">
-                <p className="text-white/50">
-                  <span className="text-white/35">Technology · </span>
-                  {p.technology.join(", ")}
-                </p>
-                <p className="text-white/50">
-                  <span className="text-white/35">Services · </span>
-                  {p.services.join(", ")}
-                </p>
-              </div>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white">
-                {p.href ? "Visit live site" : "View Case Study"}
-                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
-              </span>
+              )}
             </div>
           </div>
+        </div>
+
+        {/* ── copy */}
+        <div className="relative shrink-0 border-t border-white/10 bg-ink-2/80 p-5 sm:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <span className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/75">{p.category}</span>
+            <span className="label-mono text-white/40">{p.year ?? `0${index + 1}`}</span>
+          </div>
+          {p.client && <p className="label-mono mt-4 text-white/45">{p.client}</p>}
+          <h3 className="mt-1.5 font-display text-2xl font-bold tracking-[-0.025em] text-white sm:text-[1.75rem]">{p.name}</h3>
+          <p className="mt-2 line-clamp-2 max-w-xl text-sm leading-relaxed text-mute">{p.description}</p>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {[...p.services, ...p.technology].map((t) => (
+              <span key={t} className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 text-[11px] font-medium text-white/60">
+                {t}
+              </span>
+            ))}
+          </div>
+          <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white">
+            {p.href ? "Visit live site" : "View case study"}
+            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
+          </span>
         </div>
       </a>
     </SpotlightCard>
@@ -112,7 +133,7 @@ export function CaseStudies() {
   return (
     <section id="work" className="relative scroll-mt-20">
       <div ref={ref} style={horizontal ? { height: `calc(100vh + ${distance}px)` } : undefined}>
-        <div className={horizontal ? "sticky top-0 flex h-screen flex-col justify-center overflow-hidden" : "py-24 sm:py-28"}>
+        <div className={horizontal ? "sticky top-0 flex h-screen flex-col justify-center overflow-hidden" : "py-16 sm:py-28"}>
           <div className="container-x">
             <SectionHeading
               index="08"
@@ -128,12 +149,12 @@ export function CaseStudies() {
             style={horizontal ? { x } : undefined}
             className={
               horizontal
-                ? "mt-12 flex w-max gap-6 pl-[max(1.25rem,calc((100vw-80rem)/2+3rem))] pr-12 will-change-transform"
-                : "container-x mt-12 grid gap-5 md:grid-cols-2"
+                ? "mt-10 flex w-max gap-6 pl-[max(1.25rem,calc((100vw-80rem)/2+3rem))] pr-12 will-change-transform"
+                : "container-x mt-10 grid gap-5 md:grid-cols-2"
             }
           >
             {caseStudies.map((p, i) => (
-              <div key={p.name} className={horizontal ? "h-[62vh] max-h-[560px] w-[min(72vw,760px)] shrink-0" : "flex min-h-[460px]"}>
+              <div key={p.name} className={horizontal ? "h-[76vh] max-h-[720px] min-h-[560px] w-[min(70vw,820px)] shrink-0" : "flex h-[560px] sm:h-[600px]"}>
                 <ProjectCard p={p} index={i} />
               </div>
             ))}

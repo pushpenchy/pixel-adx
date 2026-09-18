@@ -168,10 +168,10 @@ export const caseStudies: {
     year: "2026",
     description:
       "A B2B site for a garments trims & accessories manufacturer supplying RMG exporters: product lines, OEKO-TEX credentials, process, group concerns and a quote flow — built to turn buyer research into enquiries.",
-    technology: ["HTML", "CSS", "JavaScript", "Dark / light theme"],
+    technology: ["HTML", "CSS", "JavaScript"],
     services: ["Web Development", "UI/UX Design"],
     hue: "blue",
-    image: "/work/alpha-bd-packaging.webp",
+    image: "/work/alpha-bd/desktop.webp",
     href: "https://alphabdpackaging.com/",
   },
   {
