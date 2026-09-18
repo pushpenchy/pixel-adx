@@ -58,7 +58,7 @@ function Pixel({ i, position, reduce, children }: { i: number; position?: [numbe
     if (ref.current) ref.current.scale.setScalar(Math.max(0.001, s));
   });
   return (
-    <group ref={ref} position={position}>
+    <group ref={ref} position={position} userData={{ unitScale: true }}>
       {children}
     </group>
   );
@@ -118,11 +118,11 @@ function HudDial({ reduce }: { reduce: boolean }) {
   });
   return (
     <group position={[0, -2.4, 1.2]} rotation={[-Math.PI / 2 + 0.25, 0, 0]}>
-      <mesh ref={a}>
+      <mesh ref={a} userData={{ unitScale: true }}>
         <planeGeometry args={[4.6, 4.6]} />
         <meshBasicMaterial ref={matA} map={tex} transparent toneMapped={false} depthWrite={false} />
       </mesh>
-      <mesh ref={b} position={[0, 0, 0.01]}>
+      <mesh ref={b} position={[0, 0, 0.01]} userData={{ noFit: true }}>
         <planeGeometry args={[4.6, 4.6]} />
         <meshBasicMaterial ref={matB} map={tex} transparent opacity={0.5} toneMapped={false} depthWrite={false} />
       </mesh>

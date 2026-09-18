@@ -81,7 +81,7 @@ export function ServicesBento() {
               const Scene = miniScenes[s.icon];
               const big = s.icon === "adtech";
               return (
-                <SceneView key={s.icon} track={refs[i]} cameraZ={big ? 7.8 : 6.8} y={big ? 0.35 : 0.55} scale={big ? 1.0 : 0.76}>
+                <SceneView key={s.icon} track={refs[i]} cameraZ={big ? 7.8 : 6.8} fit={big ? { w: 0.8, h: 0.62, y: 0.08 } : undefined}>
                   <Scene reduce={!!reduce} />
                 </SceneView>
               );

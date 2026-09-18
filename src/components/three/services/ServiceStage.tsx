@@ -53,7 +53,7 @@ function Slot({ id, exiting, animateIn, reduce }: { id: ServiceIcon; exiting: bo
 export function ServiceStage({ current, prev, reduce, active = true }: { current: ServiceIcon; prev?: ServiceIcon | null; reduce: boolean; active?: boolean }) {
   const hasPrev = !!prev && prev !== current;
   return (
-    <SceneCanvas active={active} reduce={reduce} size={1.75} offset={0} camera={[0, 0.9, 9.2]} look={[0, 0, 0]} grid={false} sparkles={false} particles={false} bloomIntensity={0.45} parallax={0.2}>
+    <SceneCanvas active={active} reduce={reduce} fit={{ w: 0.8, h: 0.52, y: 0.07, max: 1.35 }} camera={[0, 0.9, 9.2]} look={[0, 0, 0]} grid={false} sparkles={false} particles={false} bloomIntensity={0.45} parallax={0.2}>
       {hasPrev && <Slot key={`out-${prev}`} id={prev!} exiting animateIn={false} reduce={reduce} />}
       <Slot key={`in-${current}`} id={current} exiting={false} animateIn={hasPrev} reduce={reduce} />
     </SceneCanvas>

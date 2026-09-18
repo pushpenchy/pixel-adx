@@ -45,7 +45,7 @@ export const scenes: Record<SceneId, { name: string; tagline: string; says: stri
     name: "Command Deck",
     tagline: "A curved wall of holographic campaign dashboards around the mark.",
     says: "The AdTech control room — data, charts and KPIs you can almost touch.",
-    canvas: { size: 0.96, offset: 0.08, camera: [0, 1.4, 11], look: [0, 0.1, 0], bloomIntensity: 0.55 },
+    canvas: { fit: { w: 0.94, h: 0.86, y: 0.02, max: 0.7 }, camera: [0, 1.4, 11], look: [0, 0.1, 0], bloomIntensity: 0.55 },
   },
   skyline: {
     name: "Growth Skyline",

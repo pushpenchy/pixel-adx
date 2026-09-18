@@ -15,7 +15,7 @@ export function Section({
   bleed?: boolean;
 }) {
   return (
-    <section id={id} className={cn("relative py-24 sm:py-28 lg:py-36 scroll-mt-20", className)}>
+    <section id={id} className={cn("relative py-16 sm:py-28 lg:py-36 scroll-mt-20", className)}>
       {bleed ? children : <div className="container-x">{children}</div>}
     </section>
   );

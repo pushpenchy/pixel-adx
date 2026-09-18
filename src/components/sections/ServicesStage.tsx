@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { services, type ServiceIcon } from "@/content/site";
@@ -21,6 +21,9 @@ export function ServicesStage() {
   const reduce = useReducedMotion();
   const [sel, setSel] = useState<{ cur: ServiceIcon; prev: ServiceIcon | null }>({ cur: "adtech", prev: null });
   const timer = useRef<number | null>(null);
+  // the WebGL stage mounts once the card is within a screen of the viewport, and then stays
+  const card = useRef<HTMLDivElement>(null);
+  const near = useInView(card, { margin: "600px 0px", once: true });
 
   const pick = (id: ServiceIcon) => {
     setSel((s) => (s.cur === id ? s : { cur: id, prev: s.cur }));
@@ -34,12 +37,12 @@ export function ServicesStage() {
     <Section id="services">
       <SectionHeading index="01" eyebrow="Services" title="Everything your digital growth" accent="needs." subtitle="Advertising is our core — AdTech, media buying and performance. Around it we build the software, products and data that make growth compound." />
 
-      <div className="mt-14 grid gap-8 lg:mt-20 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+      <div className="mt-10 grid gap-6 sm:mt-14 sm:gap-8 lg:mt-20 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
         {/* stage: sticky on desktop, top on mobile */}
         <div className="order-first lg:order-last lg:sticky lg:top-24 lg:self-start">
-          <div className="crystal relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10 bg-ink-2/60 sm:aspect-[5/4]">
+          <div ref={card} className="crystal relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-white/10 bg-ink-2/60 sm:aspect-[5/4] sm:rounded-[2rem]">
             <div className="absolute inset-[15%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.22),transparent_70%)]" aria-hidden />
-            <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} />
+            {near && <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} />}
             {/* caption */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-6">
               <div>
@@ -67,7 +70,7 @@ export function ServicesStage() {
                 onFocus={() => pick(s.icon)}
                 className={cn("group relative border-b border-white/10 transition-colors duration-300", on && "bg-white/[0.03]")}
               >
-                <button type="button" onClick={() => pick(s.icon)} className="grid w-full grid-cols-[3rem_1fr_2.5rem] items-center gap-x-4 py-4 text-left sm:py-5">
+                <button type="button" onClick={() => pick(s.icon)} className="grid w-full grid-cols-[2rem_1fr_2.5rem] items-center gap-x-3 py-4 text-left sm:grid-cols-[3rem_1fr_2.5rem] sm:gap-x-4 sm:py-5">
                   <span className={cn("label-mono transition-colors", on ? "text-cyan" : "text-white/40")}>{s.index}</span>
                   <span>
                     <span className="flex items-center gap-2.5">

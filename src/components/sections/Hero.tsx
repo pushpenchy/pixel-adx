@@ -49,12 +49,12 @@ export function Hero() {
   const [l3a, l3b] = split(l3);
 
   return (
-    <section id="home" ref={ref} className="relative min-h-[100svh] overflow-hidden pt-28 sm:pt-32 lg:pt-0">
+    <section id="home" ref={ref} className="relative min-h-[100svh] overflow-hidden pt-24 sm:pt-32 lg:pt-0">
       {/* 3D scene — right on desktop, behind copy on mobile */}
       <motion.div
         ref={sceneRef}
         style={{ y: yScene }}
-        className="pointer-events-none absolute inset-x-0 top-24 h-[52vh] sm:top-16 sm:h-[60vh] lg:inset-y-0 lg:left-[42%] lg:right-[-6%] lg:h-auto"
+        className="pointer-events-none absolute inset-x-0 top-[4.5rem] h-[44svh] sm:top-16 sm:h-[60vh] lg:inset-y-0 lg:left-[42%] lg:right-0 lg:h-auto"
         aria-hidden
       >
         <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,var(--blob-a)),transparent_70%)]" />
@@ -68,7 +68,7 @@ export function Hero() {
       </motion.div>
 
       {/* Copy */}
-      <div className="container-x relative flex min-h-[100svh] flex-col justify-end pb-16 pt-[52vh] sm:pt-[60vh] lg:justify-center lg:py-32 lg:pt-40">
+      <div className="container-x relative flex flex-col pb-14 pt-[44svh] sm:min-h-[100svh] sm:justify-end sm:pb-16 sm:pt-[60vh] lg:justify-center lg:py-32 lg:pt-40">
         <motion.div style={{ y: yText, opacity: fade }} className="relative max-w-[46rem]">
           <motion.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease }}>
             <Eyebrow index="00">
@@ -132,7 +132,7 @@ export function Hero() {
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="mt-14 flex items-end justify-between gap-6 lg:absolute lg:inset-x-[max(1.25rem,calc((100%-80rem)/2+3rem))] lg:bottom-8 lg:mt-0"
+          className="mt-10 flex items-end justify-between gap-6 sm:mt-14 lg:absolute lg:inset-x-[max(1.25rem,calc((100%-80rem)/2+3rem))] lg:bottom-8 lg:mt-0"
         >
           <span className="label-mono hidden items-center gap-3 sm:inline-flex">
             <span className="relative h-10 w-px overflow-hidden bg-white/15">

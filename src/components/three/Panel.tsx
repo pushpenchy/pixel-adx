@@ -1,10 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { makeFeedLinesTexture, makePanelTexture, makeScanTexture, PANEL_SIZE, type PanelSpec } from "./textures";
-import { isLiteDevice } from "@/lib/quality";
+
+/** 1×1 transparent stand-in so the material compiles with a map from the start (no shader rebuild when the real one lands). */
+let blank: THREE.Texture | null = null;
+function blankTexture() {
+  if (!blank) {
+    blank = new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1);
+    blank.needsUpdate = true;
+  }
+  return blank;
+}
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 
@@ -31,18 +40,24 @@ export function Panel({
   delay?: number;
   reduce: boolean;
 }) {
-  const lite = useMemo(() => isLiteDevice(), []);
-  // half-res on phones, 1.5× on Retina/4K desktops
-  const texScale = lite ? 0.5 : typeof window !== "undefined" && window.devicePixelRatio >= 1.5 ? 1.5 : 1;
-  const tex = useMemo(() => makePanelTexture(spec, texScale), [spec, texScale]);
+  // 1.5× on hi-dpi screens (phones included); 1× elsewhere
+  const texScale = typeof window !== "undefined" && window.devicePixelRatio >= 1.5 ? 1.5 : 1;
+  // The dashboard is drawn on a 2D canvas — spread that work across the boot
+  // sequence instead of drawing every panel in the same frame at mount.
+  const [tex, setTex] = useState<THREE.Texture | null>(null);
+  useEffect(() => {
+    let made: THREE.Texture | null = null;
+    const t = window.setTimeout(() => {
+      made = makePanelTexture(spec, texScale);
+      setTex(made);
+    }, Math.max(0, delay * 1000 - 350));
+    return () => {
+      window.clearTimeout(t);
+      made?.dispose();
+    };
+  }, [spec, texScale, delay]);
   const scan = useMemo(() => makeScanTexture(), []);
-  useEffect(
-    () => () => {
-      tex.dispose();
-      scan.dispose();
-    },
-    [tex, scan]
-  );
+  useEffect(() => () => scan.dispose(), [scan]);
   const [pw, ph] = PANEL_SIZE[spec.kind];
   const h = width * (ph / pw);
   const feed = spec.kind === "feed";
@@ -64,11 +79,11 @@ export function Panel({
     if (start.current === null) start.current = now;
     const t = now - start.current - delay;
 
-    // ── boot: unfold from a thin bright line, then flicker on
-    const p = reduce ? 1 : easeOut(t / 0.7);
+    // ── boot: unfold from a thin bright line, then flicker on (waits for the texture)
+    const p = !tex ? 0 : reduce ? 1 : easeOut(t / 0.7);
     const flicker = reduce || t > 0.9 ? 1 : t < 0 ? 0 : 0.55 + 0.45 * Math.abs(Math.sin(t * 40)) * (t / 0.9);
     g.scale.set(Math.max(0.001, p), Math.max(0.001, 0.08 + p * 0.92), 1);
-    g.visible = t > 0 || reduce;
+    g.visible = !!tex && (t > 0 || reduce);
     if (face.current) face.current.opacity = flicker * p;
     if (back.current) back.current.opacity = 0.55 * p;
     if (edgeMat.current) edgeMat.current.opacity = 0.18 + 0.22 * flicker;
@@ -97,7 +112,7 @@ export function Panel({
   });
 
   return (
-    <group ref={group} position={position} rotation={rotation}>
+    <group ref={group} position={position} rotation={rotation} userData={{ unitScale: true }}>
       {/* glass backplate */}
       <mesh position={[0, 0, -0.03]}>
         <planeGeometry args={[width + 0.06, h + 0.06]} />
@@ -106,7 +121,7 @@ export function Panel({
       {/* drawn dashboard */}
       <mesh>
         <planeGeometry args={[width, h]} />
-        <meshBasicMaterial ref={face} map={tex} transparent toneMapped={false} />
+        <meshBasicMaterial ref={face} map={tex ?? blankTexture()} transparent toneMapped={false} />
       </mesh>
       {feed && feedTex && (
         <mesh position={[0, -h * 0.13, 0.005]}>
@@ -115,12 +130,10 @@ export function Panel({
         </mesh>
       )}
       {/* holographic scan sweep */}
-      {!lite && (
       <mesh position={[0, 0, 0.01]}>
         <planeGeometry args={[width, h]} />
         <meshBasicMaterial ref={scanMat} map={scan} transparent opacity={0.2} blending={THREE.AdditiveBlending} depthWrite={false} toneMapped={false} />
       </mesh>
-      )}
       {/* glowing edge */}
       <lineSegments geometry={edges}>
         <lineBasicMaterial ref={edgeMat} color="#9cc2ff" transparent opacity={0.4} blending={THREE.AdditiveBlending} toneMapped={false} />

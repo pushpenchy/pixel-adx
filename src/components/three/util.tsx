@@ -31,7 +31,7 @@ export function Pop({
     if (ref.current) ref.current.scale.setScalar(Math.max(0.001, s * over));
   });
   return (
-    <group ref={ref} position={position} rotation={rotation}>
+    <group ref={ref} position={position} rotation={rotation} userData={{ unitScale: true }}>
       {children}
     </group>
   );
