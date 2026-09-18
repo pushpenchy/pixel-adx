@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
@@ -14,6 +14,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("#home");
   const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -49,6 +51,12 @@ export function Navbar() {
 
   return (
     <>
+      {/* scroll progress line */}
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress, transformOrigin: "left" }}
+        className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-[linear-gradient(90deg,#38e1ff,#4d7cfe,#8b5cf6)] will-change-transform"
+      />
       <motion.header
         initial={reduce ? false : { y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

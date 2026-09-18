@@ -5,6 +5,8 @@ import "./globals.css";
 import { Background } from "@/components/Background";
 import { CursorGlow } from "@/components/CursorGlow";
 import { LiquidLens } from "@/components/LiquidLens";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { Intro } from "@/components/Intro";
 import { ThemeProvider, themeInitScript } from "@/components/theme/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -48,6 +50,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="grain min-h-dvh antialiased">
         <ThemeProvider>
+          <Intro />
+          <SmoothScroll />
           <Background />
           <CursorGlow />
           <LiquidLens />
