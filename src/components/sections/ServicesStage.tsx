@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { services, type ServiceIcon } from "@/content/site";
@@ -21,8 +21,6 @@ export function ServicesStage() {
   const reduce = useReducedMotion();
   const [sel, setSel] = useState<{ cur: ServiceIcon; prev: ServiceIcon | null }>({ cur: "adtech", prev: null });
   const timer = useRef<number | null>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(stageRef, { margin: "100px 0px" });
 
   const pick = (id: ServiceIcon) => {
     setSel((s) => (s.cur === id ? s : { cur: id, prev: s.cur }));
@@ -38,10 +36,10 @@ export function ServicesStage() {
 
       <div className="mt-14 grid gap-8 lg:mt-20 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
         {/* stage: sticky on desktop, top on mobile */}
-        <div ref={stageRef} className="order-first lg:order-last lg:sticky lg:top-24 lg:self-start">
+        <div className="order-first lg:order-last lg:sticky lg:top-24 lg:self-start">
           <div className="crystal relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10 bg-ink-2/60 sm:aspect-[5/4]">
             <div className="absolute inset-[15%] rounded-full bg-[radial-gradient(closest-side,rgba(77,124,254,0.22),transparent_70%)]" aria-hidden />
-            <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} active={inView} />
+            <ServiceStage current={sel.cur} prev={sel.prev} reduce={!!reduce} />
             {/* caption */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-6">
               <div>

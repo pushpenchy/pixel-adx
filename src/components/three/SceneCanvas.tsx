@@ -127,12 +127,41 @@ export function SceneCanvas({
     return () => window.clearTimeout(t);
   }, []);
 
+  // Own visibility gate: render while the canvas is on screen (generous margin),
+  // stop only after it has been off-screen for a moment. Defaults to visible so a
+  // late or missing observer can never freeze a frame mid-animation.
+  const wrap = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    let off: number | null = null;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          if (off) window.clearTimeout(off);
+          off = null;
+          setVisible(true);
+        } else if (!off) {
+          off = window.setTimeout(() => setVisible(false), 600);
+        }
+      },
+      { rootMargin: "250px 0px" }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      if (off) window.clearTimeout(off);
+    };
+  }, []);
+
   return (
+    <div ref={wrap} className="absolute inset-0">
     <Canvas
       dpr={dpr}
       camera={{ position: camera, fov: 34 }}
       gl={{ antialias: !lite, alpha: true, powerPreference: "high-performance", stencil: false }}
-      frameloop={active ? "always" : "never"}
+      frameloop={active && visible ? "always" : "never"}
       className="!absolute inset-0"
       style={{ pointerEvents: "none" }}
       eventSource={typeof document !== "undefined" ? document.body : undefined}
@@ -193,5 +222,6 @@ export function SceneCanvas({
         </EffectComposer>
       )}
     </Canvas>
+    </div>
   );
 }
