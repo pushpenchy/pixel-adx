@@ -22,6 +22,8 @@ export const brand = {
     "AdTech, media buying and digital technology solutions built for growth.",
   location: "Bangladesh",
   email: "hello@pixeladx.com", // placeholder — replace with the real address
+  phone: "", // e.g. "+880 1XXX XXXXXX" — shown in the contact section once set
+  whatsapp: "", // digits only, e.g. "8801XXXXXXXXX" — enables the WhatsApp button once set
   social: {
     facebook: "https://www.facebook.com/pixeladx",
     instagram: "https://www.instagram.com/pixeladx",
