@@ -31,8 +31,8 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 const cards = [
   { icon: Zap, label: "Campaign Active", sub: "Live", style: "left-[4%] top-[14%]", delay: 0, dot: true },
-  { icon: TrendingUp, label: "ROAS", sub: "Optimizing", style: "right-[2%] top-[22%]", delay: 1.4 },
-  { icon: Activity, label: "Real-Time Analytics", sub: "Streaming", style: "left-[10%] bottom-[16%]", delay: 0.8 },
+  { icon: TrendingUp, label: "ROAS", sub: "Optimizing", style: "right-[14%] top-[16%]", delay: 1.4 },
+  { icon: Activity, label: "Real-Time Analytics", sub: "Streaming", style: "right-[18%] bottom-[14%]", delay: 0.8 },
 ];
 
 export function Hero() {

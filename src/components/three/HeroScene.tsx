@@ -275,17 +275,18 @@ function CameraRig() {
   useFrame((state, dt) => {
     const cam = state.camera;
     cam.position.x = THREE.MathUtils.damp(cam.position.x, state.pointer.x * 1.1, 2.5, dt);
-    cam.position.y = THREE.MathUtils.damp(cam.position.y, state.pointer.y * 0.6, 2.5, dt);
-    cam.lookAt(0, 0, 0);
+    cam.position.y = THREE.MathUtils.damp(cam.position.y, 2.2 + state.pointer.y * 0.6, 2.5, dt);
+    cam.lookAt(0, -0.2, 0);
   });
   return null;
 }
 
 function Fit({ children }: { children: React.ReactNode }) {
   const { viewport } = useThree();
-  const s = Math.min(1, viewport.width / 8.6, viewport.height / 8);
+  // ~30% smaller than before, and sitting a touch above centre so the grid road shows beneath it
+  const s = Math.min(0.72, viewport.width / 11.5, viewport.height / 10.5);
   return (
-    <group scale={s} position={[viewport.width * 0.05, 0, 0]}>
+    <group scale={s} position={[viewport.width * 0.06, 0.35, 0]}>
       {children}
     </group>
   );
@@ -307,7 +308,7 @@ export default function HeroScene({ active = true, reduce = false, light = false
   return (
     <Canvas
       dpr={dpr}
-      camera={{ position: [0, 0, 10], fov: 34 }}
+      camera={{ position: [0, 2.2, 10.5], fov: 34 }}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance", stencil: false }}
       frameloop={active ? "always" : "never"}
       className="!absolute inset-0"
@@ -353,16 +354,16 @@ export default function HeroScene({ active = true, reduce = false, light = false
       </Fit>
 
       <Grid
-        position={[0, -3.6, -2]}
-        args={[40, 40]}
-        cellSize={0.7}
-        cellThickness={0.6}
-        cellColor={light ? "#b9c4dc" : "#1f2740"}
-        sectionSize={3.5}
-        sectionThickness={1.1}
-        sectionColor={light ? "#7c9cff" : "#3556b8"}
-        fadeDistance={26}
-        fadeStrength={2.2}
+        position={[0, -2.7, 0]}
+        args={[60, 60]}
+        cellSize={0.6}
+        cellThickness={0.7}
+        cellColor={light ? "#aab6d3" : "#2a3452"}
+        sectionSize={3}
+        sectionThickness={1.3}
+        sectionColor={light ? "#6d8fff" : "#4d7cfe"}
+        fadeDistance={34}
+        fadeStrength={1.6}
         infiniteGrid
       />
 
