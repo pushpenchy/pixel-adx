@@ -9,7 +9,7 @@ import type { LogoKey } from "./logos";
  */
 
 /** Which 3D concept the hero uses — preview all of them at /lab. */
-export const heroScene: "sphere" | "mark" | "knot" | "warp" | "globe" = "sphere";
+export const heroScene: "sphere" | "mark" | "knot" | "warp" | "globe" | "deck" | "skyline" = "sphere";
 
 export const brand = {
   name: "Pixel ADX",

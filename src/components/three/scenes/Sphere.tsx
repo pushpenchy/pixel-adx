@@ -1,10 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { rng, type SceneProps } from "../SceneCanvas";
+import { Panel } from "../Panel";
+import { makeHudTexture } from "../textures";
 
 /**
  * Attention Sphere — an iridescent liquid core (the brand) wrapped in a
@@ -208,6 +210,22 @@ export function Shards({ reduce, count = 14, inner = 4.2 }: { reduce: boolean; c
   );
 }
 
+/** Rotating HUD dial under the object. */
+export function HudRing({ reduce, y = -2.55, size = 7 }: { reduce: boolean; y?: number; size?: number }) {
+  const tex = useMemo(() => makeHudTexture(), []);
+  useEffect(() => () => tex.dispose(), [tex]);
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((_, dt) => {
+    if (ref.current && !reduce) ref.current.rotation.z += dt * 0.1;
+  });
+  return (
+    <mesh ref={ref} position={[0, y, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[size, size]} />
+      <meshBasicMaterial map={tex} transparent opacity={0.8} toneMapped={false} depthWrite={false} />
+    </mesh>
+  );
+}
+
 export default function SphereScene({ reduce }: SceneProps) {
   return (
     <>
@@ -219,6 +237,9 @@ export default function SphereScene({ reduce }: SceneProps) {
       <Stream seed={2} radius={2.8} tilt={[-0.7, 0.9, 0.5]} color="#8b5cf6" speed={0.045} reduce={reduce} />
       <Stream seed={3} radius={2.35} tilt={[0.2, -1.1, 1.2]} color="#9cc2ff" speed={0.075} reduce={reduce} />
       <Shards reduce={reduce} />
+      <HudRing reduce={reduce} />
+      <Panel spec={{ title: "Conversions · 14d", value: "1,362", sub: "▲ 18.4% · demo data", kind: "line", accent: "#38e1ff", seed: 5 }} position={[-3.9, 1.9, 0.8]} rotation={[0, 0.5, 0]} width={2.2} reduce={reduce} />
+      <Panel spec={{ title: "Performance", value: "4.2×", sub: "ROAS · demo data", kind: "kpis", accent: "#8b5cf6", seed: 7 }} position={[3.9, -1.2, 1.2]} rotation={[0, -0.5, 0]} width={2.2} phase={2} reduce={reduce} />
     </>
   );
 }

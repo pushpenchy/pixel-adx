@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import * as THREE from "three";
 import type { SceneProps } from "../SceneCanvas";
 import { landLonLat } from "@/lib/worldmap";
 import { reachPoints } from "@/content/site";
+import { makeLabelTexture } from "../textures";
+import { HudRing } from "./Sphere";
 
 /**
  * Holographic Globe — the world as a dot-matrix hologram, slowly turning,
@@ -75,6 +77,17 @@ function Arc({ from, to, i, reduce }: { from: THREE.Vector3; to: THREE.Vector3; 
   );
 }
 
+function Label({ text, at, accent }: { text: string; at: THREE.Vector3; accent?: string }) {
+  const tex = useMemo(() => makeLabelTexture(text, accent), [text, accent]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  const pos = useMemo(() => at.clone().multiplyScalar(1.16), [at]);
+  return (
+    <sprite position={pos} scale={[1.5, 0.375, 1]}>
+      <spriteMaterial map={tex} transparent toneMapped={false} depthWrite={false} />
+    </sprite>
+  );
+}
+
 function GlobeBody({ reduce }: { reduce: boolean }) {
   const group = useRef<THREE.Group>(null);
   const home = reachPoints.find((p) => p.home)!;
@@ -117,6 +130,9 @@ function GlobeBody({ reduce }: { reduce: boolean }) {
       {targets.map((t, i) => (
         <Arc key={i} from={homeVec} to={t} i={i} reduce={reduce} />
       ))}
+      {reachPoints.map((p) => (
+        <Label key={p.label} text={p.label} at={toVec(p.lon, p.lat)} accent={p.home ? "#38e1ff" : "#8b5cf6"} />
+      ))}
       {/* home beacon */}
       <mesh ref={beacon} position={homeVec}>
         <sphereGeometry args={[0.09, 16, 16]} />
@@ -138,6 +154,7 @@ export default function GlobeScene({ reduce }: SceneProps) {
         <torusGeometry args={[3.6, 0.008, 8, 200]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.12} />
       </mesh>
+      <HudRing reduce={reduce} y={-2.6} size={6.5} />
     </group>
   );
 }

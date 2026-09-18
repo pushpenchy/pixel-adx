@@ -5,6 +5,8 @@ import { useFrame } from "@react-three/fiber";
 import { Float, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import type { SceneProps } from "../SceneCanvas";
+import { Panel } from "../Panel";
+import { HudRing } from "./Sphere";
 
 /**
  * Pixel Mark — the logo itself in 3D: four candy-glass cubes with glowing
@@ -110,6 +112,9 @@ export default function PixelMarkScene({ reduce }: SceneProps) {
       <Orbit radius={3.4} tilt={[1.2, 0.2, 0.4]} speed={0.55} phase={0} color="#38e1ff" reduce={reduce} />
       <Orbit radius={3.9} tilt={[-1.0, 0.6, -0.3]} speed={0.4} phase={2} color="#9cc2ff" reduce={reduce} />
       <Orbit radius={4.4} tilt={[0.6, -0.8, 0.9]} speed={0.3} phase={4} color="#c4b5fd" reduce={reduce} />
+      <Panel spec={{ title: "Campaign", value: "Active", sub: "Live · 24/7 monitoring", kind: "bars", accent: "#38e1ff", seed: 4 }} position={[-3.4, 1.6, 0.6]} rotation={[0, 0.45, 0]} width={1.9} reduce={reduce} />
+      <Panel spec={{ title: "Performance", value: "4.2×", sub: "ROAS · demo data", kind: "kpis", accent: "#8b5cf6", seed: 7 }} position={[3.4, -1.4, 0.8]} rotation={[0, -0.45, 0]} width={1.9} phase={2} reduce={reduce} />
+      <HudRing reduce={reduce} y={-2.3} size={5.5} />
     </group>
   );
 }
