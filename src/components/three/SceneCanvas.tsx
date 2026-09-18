@@ -130,8 +130,8 @@ export type SceneCanvasProps = {
   bloomIntensity?: number;
   /** strength of the cursor camera drift (1 = hero, 0 = none) */
   parallax?: number;
-  /** bounds-based framing (see AutoFit); when unset the legacy Fit heuristic is used */
-  fit?: { w?: number; h?: number; y?: number; max?: number };
+  /** bounds-based framing (see AutoFit); "none" leaves framing to the children; unset uses the legacy Fit heuristic */
+  fit?: { w?: number; h?: number; y?: number; max?: number } | "none";
 };
 
 export function SceneCanvas({
@@ -203,6 +203,14 @@ export function SceneCanvas({
       className="!absolute inset-0"
       style={{ pointerEvents: "none" }}
       eventSource={typeof document !== "undefined" ? document.body : undefined}
+      onCreated={(state) =>
+        state.setEvents({
+          compute: (event, st) => {
+            st.pointer.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
+            st.raycaster.setFromCamera(st.pointer, st.camera);
+          },
+        })
+      }
     >
       {warm && (
         <PerformanceMonitor
@@ -231,7 +239,9 @@ export function SceneCanvas({
       </Environment>
 
       <SizeGuard wrap={wrap} />
-      {fit ? (
+      {fit === "none" ? (
+        children
+      ) : fit ? (
         <AutoFit w={fit.w} h={fit.h} y={fit.y} max={fit.max}>
           {children}
         </AutoFit>

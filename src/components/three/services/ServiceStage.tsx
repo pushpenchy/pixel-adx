@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import type { ServiceIcon } from "@/content/site";
 import { SceneCanvas } from "../SceneCanvas";
+import { AutoFit } from "../AutoFit";
 import { miniScenes } from "./MiniScenes";
 
 /**
@@ -45,7 +46,10 @@ function Slot({ id, exiting, animateIn, reduce }: { id: ServiceIcon; exiting: bo
   });
   return (
     <group ref={ref} scale={animateIn && !reduce ? 0.001 : 1}>
-      <Scene reduce={reduce} />
+      {/* each vignette frames itself: the slide/scale transition above is not part of the measured bounds */}
+      <AutoFit w={0.8} h={0.48} y={0.12} max={1.35}>
+        <Scene reduce={reduce} />
+      </AutoFit>
     </group>
   );
 }
@@ -53,7 +57,7 @@ function Slot({ id, exiting, animateIn, reduce }: { id: ServiceIcon; exiting: bo
 export function ServiceStage({ current, prev, reduce, active = true }: { current: ServiceIcon; prev?: ServiceIcon | null; reduce: boolean; active?: boolean }) {
   const hasPrev = !!prev && prev !== current;
   return (
-    <SceneCanvas active={active} reduce={reduce} fit={{ w: 0.8, h: 0.52, y: 0.07, max: 1.35 }} camera={[0, 0.9, 9.2]} look={[0, 0, 0]} grid={false} sparkles={false} particles={false} bloomIntensity={0.45} parallax={0.2}>
+    <SceneCanvas active={active} reduce={reduce} fit="none" camera={[0, 0.9, 9.2]} look={[0, 0, 0]} grid={false} sparkles={false} particles={false} bloomIntensity={0.45} parallax={0.2}>
       {hasPrev && <Slot key={`out-${prev}`} id={prev!} exiting animateIn={false} reduce={reduce} />}
       <Slot key={`in-${current}`} id={current} exiting={false} animateIn={hasPrev} reduce={reduce} />
     </SceneCanvas>

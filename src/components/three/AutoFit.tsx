@@ -74,7 +74,13 @@ export function AutoFit({ w = 0.8, h = 0.6, y = 0.1, max = 1.5, children }: { w?
         const dist = cam.position.length();
         const vh = 2 * dist * Math.tan((fov * Math.PI) / 360);
         const vw = vh * (size.width / size.height);
-        const s = Math.min((w * vw) / Math.max(dims.x, 1e-3), (h * vh) / Math.max(dims.y, 1e-3), max);
+        // the box is centred at z = 0, so its near face sits dist - depth/2 from the
+        // camera and projects larger than the z = 0 slice: shrink to fit that, not the slice
+        let s = Math.min((w * vw) / Math.max(dims.x, 1e-3), (h * vh) / Math.max(dims.y, 1e-3), max);
+        for (let pass = 0; pass < 2; pass++) {
+          const k = Math.max(1, dist / Math.max(1e-3, dist - (dims.z * s) / 4)); // half-weighted: near-z parts are rarely the widest
+          s = Math.min((w * vw) / (Math.max(dims.x, 1e-3) * k), (h * vh) / (Math.max(dims.y, 1e-3) * k), max);
+        }
         target.current = { s, x: -center.x * s, y: y * vh - center.y * s, z: -center.z * s };
         if (!settled.current) {
           settled.current = true;
