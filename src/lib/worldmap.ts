@@ -56,3 +56,14 @@ export function worldDots(w: number, h: number, step = 3) {
   }
   return dots;
 }
+
+/** Land sample points as lon/lat (degrees) — for the 3D globe. */
+export function landLonLat(step = 3) {
+  const out: { lon: number; lat: number }[] = [];
+  for (let lat = 84; lat >= -58; lat -= step) {
+    for (let lon = -180; lon <= 180; lon += step) {
+      if (continents.some((p) => inside(p, lon, lat))) out.push({ lon, lat });
+    }
+  }
+  return out;
+}
