@@ -2,24 +2,13 @@
 
 import { createRef, useMemo, useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, PerspectiveCamera, View } from "@react-three/drei";
 import { ArrowUpRight, Radar, Megaphone, Target, Braces, Globe, Smartphone, PenTool, ShoppingBag, BarChart3, Workflow, type LucideIcon } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { services, type ServiceIcon } from "@/content/site";
 import { miniScenes } from "@/components/three/services/MiniScenes";
+import { SceneView, ViewCanvas } from "@/components/three/ViewCanvas";
 import { isLiteDevice } from "@/lib/quality";
 import { cn } from "@/lib/utils";
-
-/** With <View> rendering manually, R3F never clears the canvas — do it once per frame, before the views. */
-function ClearPass() {
-  useFrame(({ gl }) => {
-    gl.setClearColor(0x000000, 0);
-    gl.setScissorTest(false);
-    gl.clear();
-  }, 0);
-  return null;
-}
 
 const CORE: ServiceIcon[] = ["adtech", "media", "performance"];
 const icons: Record<ServiceIcon, LucideIcon> = { adtech: Radar, media: Megaphone, performance: Target, software: Braces, web: Globe, mobile: Smartphone, uiux: PenTool, ecommerce: ShoppingBag, data: BarChart3, automation: Workflow };
@@ -85,38 +74,19 @@ export function ServicesBento() {
           })}
         </div>
 
-        {/* one context, many views — fixed full-window layer under the navbar */}
         {near && (
-        <Canvas
-          eventSource={container as React.RefObject<HTMLElement>}
-          className="!pointer-events-none !fixed inset-0 z-10"
-          dpr={lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 1.5)}
-          gl={{ antialias: false, alpha: true, powerPreference: "high-performance", stencil: false }}
-        >
-          <ClearPass />
-          {services.map((s, i) =>
-            is3D(s.icon) ? (
-              <View key={s.icon} track={refs[i] as React.RefObject<HTMLElement>}>
-                <PerspectiveCamera makeDefault position={[0, 0.7, s.icon === "adtech" ? 8.2 : 7.6]} fov={34} />
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[4, 6, 6]} intensity={1.4} />
-                <pointLight position={[-5, 3, 4]} intensity={30} color="#38e1ff" />
-                <pointLight position={[5, -3, 3]} intensity={30} color="#8b5cf6" />
-                <Environment resolution={128} frames={1}>
-                  <Lightformer intensity={2.5} position={[0, 6, -8]} scale={[12, 6, 1]} color="#dfe8ff" />
-                  <Lightformer intensity={2} position={[-8, 2, 2]} rotation={[0, Math.PI / 2, 0]} scale={[6, 6, 1]} color="#38e1ff" />
-                  <Lightformer intensity={2} position={[8, -2, 2]} rotation={[0, -Math.PI / 2, 0]} scale={[6, 6, 1]} color="#8b5cf6" />
-                </Environment>
-                <group position={[0, s.icon === "adtech" ? 0.35 : 0.55, 0]} scale={s.icon === "adtech" ? 0.92 : 0.66}>
-                  {(() => {
-                    const Scene = miniScenes[s.icon];
-                    return <Scene reduce={!!reduce} />;
-                  })()}
-                </group>
-              </View>
-            ) : null
-          )}
-        </Canvas>
+          <ViewCanvas eventSource={container} lite={lite}>
+            {services.map((s, i) => {
+              if (!is3D(s.icon)) return null;
+              const Scene = miniScenes[s.icon];
+              const big = s.icon === "adtech";
+              return (
+                <SceneView key={s.icon} track={refs[i]} cameraZ={big ? 8.2 : 7.6} y={big ? 0.35 : 0.55} scale={big ? 0.92 : 0.66}>
+                  <Scene reduce={!!reduce} />
+                </SceneView>
+              );
+            })}
+          </ViewCanvas>
         )}
       </div>
     </Section>

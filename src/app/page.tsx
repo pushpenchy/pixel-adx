@@ -3,7 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
-import { Services } from "@/components/sections/Services";
+import { ServicesStage } from "@/components/sections/ServicesStage";
 import { TrafficSources } from "@/components/sections/TrafficSources";
 import { TextTicker } from "@/components/ui/TextTicker";
 
@@ -29,7 +29,7 @@ export default function Home() {
         <Stats />
         <TrafficSources />
         <TextTicker items={["AdTech", "Media Buying", "Performance", "Software", "Data", "Growth"]} />
-        <Services />
+        <ServicesStage />
         <ServicesStory />
         <AdTech />
         <MediaBuying />
