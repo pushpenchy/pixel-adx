@@ -32,7 +32,9 @@ export function Panel({
   reduce: boolean;
 }) {
   const lite = useMemo(() => isLiteDevice(), []);
-  const tex = useMemo(() => makePanelTexture(spec, lite ? 0.5 : 1), [spec, lite]);
+  // half-res on phones, 1.5× on Retina/4K desktops
+  const texScale = lite ? 0.5 : typeof window !== "undefined" && window.devicePixelRatio >= 1.5 ? 1.5 : 1;
+  const tex = useMemo(() => makePanelTexture(spec, texScale), [spec, texScale]);
   const scan = useMemo(() => makeScanTexture(), []);
   useEffect(
     () => () => {

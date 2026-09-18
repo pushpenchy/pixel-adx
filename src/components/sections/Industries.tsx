@@ -107,7 +107,7 @@ export function Industries() {
               if (!is3D(ind.name)) return null;
               const Scene = industryScenes[ind.name];
               return (
-                <SceneView key={ind.name} track={refs[i]} cameraZ={7.4} y={0.55} scale={0.6}>
+                <SceneView key={ind.name} track={refs[i]} cameraZ={6.6} y={0.55} scale={0.74}>
                   <Scene reduce={!!reduce} />
                 </SceneView>
               );

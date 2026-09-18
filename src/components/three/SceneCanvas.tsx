@@ -116,7 +116,7 @@ export function SceneCanvas({
   // lite tier (phones / low-core): 1× render, no bloom, fewer particles
   const lite = useMemo(() => isLiteDevice(), []);
   // render at the device ratio (capped) — supersampling a 1× screen is pure waste
-  const maxDpr = lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5);
+  const maxDpr = lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 2);
   const [dpr, setDpr] = useState(maxDpr);
   const [bloom, setBloom] = useState(!lite);
   // Start sampling only after shaders have compiled, otherwise the first-frame
@@ -131,7 +131,7 @@ export function SceneCanvas({
     <Canvas
       dpr={dpr}
       camera={{ position: camera, fov: 34 }}
-      gl={{ antialias: false, alpha: true, powerPreference: "high-performance", stencil: false }}
+      gl={{ antialias: !lite, alpha: true, powerPreference: "high-performance", stencil: false }}
       frameloop={active ? "always" : "never"}
       className="!absolute inset-0"
       style={{ pointerEvents: "none" }}
@@ -188,7 +188,7 @@ export function SceneCanvas({
       {!reduce && <CameraRig base={camera} look={look} parallax={parallax} />}
 
       {bloom && !lite && (
-        <EffectComposer multisampling={0} enableNormalPass={false}>
+        <EffectComposer multisampling={4} enableNormalPass={false}>
           <Bloom mipmapBlur intensity={(light ? 0.5 : 1.0) * bloomIntensity} luminanceThreshold={0.82} luminanceSmoothing={0.25} radius={0.7} levels={6} />
         </EffectComposer>
       )}
