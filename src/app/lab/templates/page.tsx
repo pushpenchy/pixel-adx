@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
-import { templates } from "@/components/templates/TemplatePage";
+import { templates } from "@/components/templates/list";
 
 /**
  * Template picker: four alternative homepage compositions built from
