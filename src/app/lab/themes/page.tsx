@@ -130,6 +130,9 @@ export default function ThemesLab() {
         <p className="label-mono mt-10 normal-case tracking-normal">
           Tell me the name and I make it the default and delete the rest — or mix them (e.g. Horizon layout with Nebula colours).
         </p>
+        <Link href="/lab/templates" className="glass liquid-press mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white">
+          Homepage templates →
+        </Link>
       </div>
     </main>
   );
